@@ -1,0 +1,936 @@
+{\rtf1\ansi\ansicpg1251\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww28600\viewh14820\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html>\
+<head>\
+  <base target="_top">\
+  <meta charset="UTF-8">\
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">\
+  <title>\uc0\u1044 \u1077 \u1090 \u1089 \u1082 \u1080 \u1081  \u1089 \u1072 \u1076 : \u1055 \u1072 \u1085 \u1077 \u1083 \u1100  \u1091 \u1087 \u1088 \u1072 \u1074 \u1083 \u1077 \u1085 \u1080 \u1103 </title>\
+  <!-- \uc0\u1057 \u1082 \u1088 \u1080 \u1087 \u1090  \u1076 \u1083 \u1103  \u1080 \u1085 \u1090 \u1077 \u1075 \u1088 \u1072 \u1094 \u1080 \u1080  \u1089  Telegram -->\
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>\
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>\
+  <style>\
+    :root \{\
+      --bg-color: #f4f6f9; --card-bg-color: #ffffff; --text-color: #1c1c1e; --text-color-secondary: #8a8a8e; --primary-color: #5856d6; --light-border-color: #eef2f7; --shadow: 0 4px 15px rgba(0, 0, 0, 0.06);\
+      --color-present: #34c759; --color-absent: #ff3b30; --color-sick: #5856d6; --color-adaptation: #ff9500; --color-inactive: #f2f2f7;\
+    \}\
+    body \{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-color); \}\
+    h1, h2, h3, h4 \{ margin-top: 0; font-weight: 600; \}\
+    .top-nav \{ background-color: var(--card-bg-color); padding: 10px 20px; border-bottom: 1px solid var(--light-border-color); display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 100; \}\
+    .top-nav a \{ text-decoration: none; color: var(--text-color-secondary); font-size: 1em; font-weight: 500; padding: 10px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; \}\
+    .top-nav a.active \{ background-color: var(--primary-color); color: white; \}\
+    .main-content \{ padding: 20px; max-width: 900px; margin: 0 auto; \}\
+    .view \{ display: none; \}\
+    .view.active \{ display: block; \}\
+    .card \{ background-color: var(--card-bg-color); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; \}\
+    h1 \{ font-size: 2em; margin-bottom: 20px; \}\
+    h3 \{ font-size: 1.3em; margin-bottom: 15px; \}\
+    #controls \{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; \}\
+    #week-display \{ font-size: 1.1em; font-weight: 600; \}\
+    .table-responsive-wrapper \{ width: 100%; overflow-x: auto; \}\
+    table \{ width: 100%; border-collapse: collapse; \}\
+    th, td \{ border: none; border-bottom: 1px solid var(--light-border-color); padding: 16px 14px; text-align: center; white-space: nowrap; \}\
+    th \{ background-color: transparent; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; text-transform: uppercase; \}\
+    td \{ font-size: 1em; \}\
+    tr:last-child td \{ border-bottom: none; \}\
+    td:not(:first-child) \{ cursor: pointer; \}\
+    .today \{ background-color: var(--light-border-color); border-radius: 12px; \}\
+    tfoot tr \{ font-weight: bold; color: var(--primary-color); \}\
+    tfoot td \{ border-top: 2px solid var(--light-border-color); \}\
+    label \{ display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; \}\
+    input, select \{ width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid var(--light-border-color); border-radius: 12px; box-sizing: border-box; font-size: 1em; background-color: var(--bg-color); \}\
+    input:focus, select:focus \{ outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(88, 86, 214, 0.2); \}\
+    button, .btn \{ border-radius: 12px; cursor: pointer; font-size: 1em; font-weight: 500; transition: all 0.2s ease; border: none; padding: 14px; text-decoration: none; display: inline-block; text-align: center; \}\
+    button[type="submit"] \{ background-color: var(--primary-color); color: white; width: 100%; \}\
+    button[type="submit"]:hover \{ opacity: 0.85; \}\
+    .modal \{ display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); \}\
+    .modal-content \{ background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 400px; border-radius: 16px; \}\
+    .modal-header \{ padding-bottom: 10px; border-bottom: 1px solid #ccc; \} .modal-header h2 \{ margin: 0; \} .modal-body \{ padding: 15px 0; \} .status-buttons button \{ width: 100%; box-sizing: border-box; padding: 14px; margin: 6px 0; font-size: 1em; cursor: pointer; border-radius: 12px; border: 1px solid var(--light-border-color); background-color: #fff; \} .status-buttons button.selected \{ background-color: var(--primary-color); color: white; border-color: var(--primary-color); \} #adaptation-details \{ display: none; margin-top: 15px; \} #adaptation-details input \{ width: 100px; \} .modal-footer \{ text-align: right; margin-top: 15px; \} .close-btn \{ color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; \}\
+    .status-icon \{ font-size: 1.4em; font-weight: bold; \}\
+    .status-present \{ color: #34c759; \} .status-absent \{ color: #ff3b30; \} .status-sick \{ color: #5856d6; \} .status-adaptation \{ color: #ff9500; \}\
+    #expected-income \{ color: #34c759; font-weight: bold; \} #actual-income \{ color: var(--primary-color); font-weight: bold; \}\
+    #debtors-list p \{ color: #ff3b30; border-left: 3px solid #ff3b30; padding-left: 10px; margin: 5px 0; \}\
+    #overpayments-list p \{ color: #34c759; border-left: 3px solid #34c759; padding-left: 10px; margin: 5px 0; \}\
+    #save-attendance-btn \{ display: none; width: 100%; padding: 15px; margin-top: 20px; background-color: var(--color-present); color: white; border: none; \}\
+    #adaptation-summary-container p \{ margin: 4px 0; font-size: 0.95em; \}\
+    .history-filters \{ display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; \}\
+    .history-filters > div \{ flex: 1; min-width: 150px; \}\
+    .payment-item, .child-item \{ display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--light-border-color); \}\
+    .payment-item:last-child, .child-item:last-child \{ border-bottom: none; \}\
+    .payment-item-details, .child-item-details \{ display: flex; flex-direction: column; \}\
+    .payment-item-fio, .child-item-fio \{ font-weight: 500; \}\
+    .payment-item-date, .child-item-sub \{ font-size: 0.9em; color: var(--text-color-secondary); \}\
+    .payment-item-amount \{ font-size: 1.1em; font-weight: 600; color: var(--primary-color); \}\
+    .child-item.inactive \{ background-color: var(--color-inactive); opacity: 0.6; \}\
+    .child-item-actions \{ display: flex; gap: 8px; \}\
+    .btn-small \{ padding: 6px 12px; font-size: 0.85em; \}\
+    .btn-edit \{ background-color: #ff9500; color: white; \}\
+    .btn-deactivate \{ background-color: #ff3b30; color: white; \}\
+    .btn-activate \{ background-color: #34c759; color: white; \}\
+\
+    @media (max-width: 768px) \{\
+      .main-content \{ padding: 15px; \}\
+      .card \{ padding: 15px; \}\
+      .top-nav \{ padding: 10px 5px; \}\
+      .top-nav a \{ padding: 8px 12px; \}\
+      h1 \{ font-size: 1.8em; \}\
+      h3 \{ font-size: 1.2em; \}\
+      input, select, button \{ font-size: 16px; \}\
+      .finance-section \{ display: flex; flex-direction: column; gap: 20px; \}\
+    \}\
+  </style>\
+</head>\
+<body>\
+  <div class="top-nav">\
+    <a class="nav-link active" onclick="showView('attendance-view', this)">\uc0\u1055 \u1086 \u1089 \u1077 \u1097 \u1072 \u1077 \u1084 \u1086 \u1089 \u1090 \u1100 </a>\
+    <a class="nav-link" onclick="showView('finance-view', this)">\uc0\u1060 \u1080 \u1085 \u1072 \u1085 \u1089 \u1099 </a>\
+    <a class="nav-link" onclick="showView('expenses-view', this)">\uc0\u1056 \u1072 \u1089 \u1093 \u1086 \u1076 \u1099 </a>\
+    <a class="nav-link" onclick="showView('summary-view', this)">\uc0\u1057 \u1074 \u1086 \u1076 \u1082 \u1072 </a>\
+  </div>\
+\
+  <div class="main-content">\
+    <div id="attendance-view" class="view active">\
+      <h1>\uc0\u1055 \u1086 \u1089 \u1077 \u1097 \u1072 \u1077 \u1084 \u1086 \u1089 \u1090 \u1100 </h1>\
+      <div class="card">\
+        <div id="controls">\
+          <div id="week-display">\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</div>\
+          <div style="display: flex; gap: 10px;">\
+            <button onclick="changeWeek(-7)">&lt;</button>\
+            <button onclick="changeWeek(7)">&gt;</button>\
+          </div>\
+        </div>\
+        <div id="attendance-table-container" class="table-responsive-wrapper"><p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p></div>\
+        <div id="adaptation-summary-container" style="margin-top: 20px; display: none;">\
+          <hr style="border: none; border-top: 1px solid var(--light-border-color); margin-bottom: 20px;">\
+          <h4>\uc0\u1057 \u1074 \u1086 \u1076 \u1082 \u1072  \u1087 \u1086  \u1072 \u1076 \u1072 \u1087 \u1090 \u1072 \u1094 \u1080 \u1080  \u1079 \u1072  \u1085 \u1077 \u1076 \u1077 \u1083 \u1102 :</h4>\
+          <div id="daily-adaptation-summary"></div>\
+          <div id="weekly-adaptation-summary" style="margin-top: 15px; font-weight: 500;"></div>\
+        </div>\
+        <button id="save-attendance-btn" onclick="saveAllChanges()">\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1080 \u1090 \u1100  \u1080 \u1079 \u1084 \u1077 \u1085 \u1077 \u1085 \u1080 \u1103 </button>\
+      </div>\
+    </div>\
+    <div id="finance-view" class="view">\
+      <h1>\uc0\u1060 \u1080 \u1085 \u1072 \u1085 \u1089 \u1099 </h1>\
+      <div class="finance-section">\
+        <div id="payment-card" class="card">\
+          <h3>\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1087 \u1083 \u1072 \u1090 \u1105 \u1078 </h3>\
+          <form id="add-payment-form" class="finance-form">\
+            <label for="kid-select">\uc0\u1056 \u1077 \u1073 \u1105 \u1085 \u1086 \u1082 :</label><select id="kid-select" required></select>\
+            <label for="month-select">\uc0\u1052 \u1077 \u1089 \u1103 \u1094 :</label><select id="month-select" required></select>\
+            <label for="amount">\uc0\u1057 \u1091 \u1084 \u1084 \u1072 :</label><input type="number" id="amount" required>\
+            <button type="submit">\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1087 \u1083 \u1072 \u1090 \u1105 \u1078 </button>\
+          </form>\
+        </div>\
+        <div id="summary-card" class="card">\
+          <h3>\uc0\u1057 \u1074 \u1086 \u1076 \u1082 \u1072 </h3>\
+          <label for="summary-month-filter">\uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1084 \u1077 \u1089 \u1103 \u1094 :</label>\
+          <select id="summary-month-filter"></select>\
+          <p>\uc0\u1055 \u1083 \u1072 \u1085 : <span id="expected-income">...</span> \u8381 </p>\
+          <p>\uc0\u1060 \u1072 \u1082 \u1090 : <span id="actual-income">...</span> \u8381 </p>\
+          <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 20px 0;">\
+          <h4>\uc0\u1044 \u1086 \u1083 \u1075 \u1080 :</h4>\
+          <div id="debtors-list"><p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p></div>\
+          <h4 style="margin-top: 20px;">\uc0\u1055 \u1077 \u1088 \u1077 \u1087 \u1083 \u1072 \u1090 \u1099 :</h4>\
+          <div id="overpayments-list"><p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p></div>\
+        </div>\
+        <div id="child-card" class="card">\
+          <h3>\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1077 \u1073 \u1105 \u1085 \u1082 \u1072 </h3>\
+          <form id="add-child-form" class="finance-form">\
+            <label for="fio">\uc0\u1060 \u1048 \u1054 :</label><input type="text" id="fio" required>\
+            <label for="group-select">\uc0\u1043 \u1088 \u1091 \u1087 \u1087 \u1072 :</label><select id="group-select" required></select>\
+            <label for="tariff">\uc0\u1058 \u1072 \u1088 \u1080 \u1092 :</label><input type="number" id="tariff" required>\
+            <button type="submit">\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1077 \u1073 \u1105 \u1085 \u1082 \u1072 </button>\
+          </form>\
+        </div>\
+        <div id="child-management-card" class="card">\
+          <h3>\uc0\u1059 \u1087 \u1088 \u1072 \u1074 \u1083 \u1077 \u1085 \u1080 \u1077  \u1076 \u1077 \u1090 \u1100 \u1084 \u1080 </h3>\
+          <div id="child-list"><p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p></div>\
+        </div>\
+        <div id="history-card" class="card">\
+          <h3>\uc0\u1048 \u1089 \u1090 \u1086 \u1088 \u1080 \u1103  \u1087 \u1083 \u1072 \u1090 \u1077 \u1078 \u1077 \u1081 </h3>\
+          <div class="history-filters">\
+            <div>\
+              <label for="history-kid-filter">\uc0\u1056 \u1077 \u1073 \u1105 \u1085 \u1086 \u1082 :</label>\
+              <select id="history-kid-filter"></select>\
+            </div>\
+            <div>\
+              <label for="history-month-filter">\uc0\u1052 \u1077 \u1089 \u1103 \u1094 :</label>\
+              <select id="history-month-filter"></select>\
+            </div>\
+          </div>\
+          <button onclick="resetFilters()">\uc0\u1057 \u1073 \u1088 \u1086 \u1089 \u1080 \u1090 \u1100  \u1092 \u1080 \u1083 \u1100 \u1090 \u1088 \u1099 </button>\
+          <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 20px 0;">\
+          <div id="payment-history-list"><p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p></div>\
+        </div>\
+      </div>\
+    </div>\
+    <div id="expenses-view" class="view">\
+      <h1>\uc0\u1056 \u1072 \u1089 \u1093 \u1086 \u1076 \u1099 </h1>\
+      <div class="card">\
+        <h3>\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 </h3>\
+        <form id="add-expense-form">\
+          <label for="expense-month-select">\uc0\u1052 \u1077 \u1089 \u1103 \u1094  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 \u1072 :</label>\
+          <select id="expense-month-select" required></select>\
+          <label for="expense-category-select">\uc0\u1050 \u1072 \u1090 \u1077 \u1075 \u1086 \u1088 \u1080 \u1103 :</label>\
+          <select id="expense-category-select" required></select>\
+          <label for="expense-amount">\uc0\u1057 \u1091 \u1084 \u1084 \u1072 :</label>\
+          <input type="number" id="expense-amount" required>\
+          <label for="expense-description">\uc0\u1054 \u1087 \u1080 \u1089 \u1072 \u1085 \u1080 \u1077  (\u1085 \u1077 \u1086 \u1073 \u1103 \u1079 \u1072 \u1090 \u1077 \u1083 \u1100 \u1085 \u1086 ):</label>\
+          <input type="text" id="expense-description">\
+          <button type="submit">\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 </button>\
+        </form>\
+      </div>\
+      <div class="card">\
+        <h3>\uc0\u1048 \u1089 \u1090 \u1086 \u1088 \u1080 \u1103  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 \u1086 \u1074 </h3>\
+        <label for="expense-month-filter">\uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1084 \u1077 \u1089 \u1103 \u1094 :</label>\
+        <select id="expense-month-filter"></select>\
+        <div id="expense-list" style="margin-top: 15px;"></div>\
+        <h4 style="margin-top: 20px; text-align: right;">\uc0\u1048 \u1090 \u1086 \u1075 \u1086 : <span id="expense-total" style="color: var(--primary-color);">0 \u8381 </span></h4>\
+      </div>\
+    </div>\
+    <div id="summary-view" class="view">\
+      <h1>\uc0\u1057 \u1074 \u1086 \u1076 \u1082 \u1072 </h1>\
+      <div class="card">\
+        <h3>\uc0\u1057 \u1088 \u1077 \u1076 \u1085 \u1080 \u1081  \u1095 \u1077 \u1082 </h3>\
+        <label for="avg-check-month-filter">\uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1084 \u1077 \u1089 \u1103 \u1094 :</label>\
+        <select id="avg-check-month-filter"></select>\
+        <p style="font-size: 2.5em; font-weight: 700; color: var(--primary-color); margin-top: 10px;">\
+          <span id="avg-check-result">...</span> \uc0\u8381 \
+        </p>\
+      </div>\
+      <div class="card">\
+        <h3>\uc0\u1055 \u1086 \u1089 \u1077 \u1097 \u1072 \u1077 \u1084 \u1086 \u1089 \u1090 \u1100  \u1087 \u1086  \u1076 \u1085 \u1103 \u1084  \u1084 \u1077 \u1089 \u1103 \u1094 \u1072 </h3>\
+        <label for="chart-month-filter">\uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1084 \u1077 \u1089 \u1103 \u1094 :</label>\
+        <select id="chart-month-filter"></select>\
+        <canvas id="attendanceChart" style="margin-top: 15px;"></canvas>\
+      </div>\
+    </div>\
+  </div>\
+  \
+  <div id="status-modal" class="modal">\
+    <div class="modal-content">\
+      <div class="modal-header"><span class="close-btn" onclick="closeModal('status-modal')">&times;</span><h2>\uc0\u1054 \u1090 \u1084 \u1077 \u1090 \u1080 \u1090 \u1100  \u1087 \u1086 \u1089 \u1077 \u1097 \u1072 \u1077 \u1084 \u1086 \u1089 \u1090 \u1100 </h2></div>\
+      <div class="modal-body">\
+        <p id="modal-kid-info"></p>\
+        <div class="status-buttons">\
+          <button onclick="selectStatus('\uc0\u1055 ', this)">\u1055 \u1088 \u1080 \u1089 \u1091 \u1090 \u1089 \u1090 \u1074 \u1086 \u1074 \u1072 \u1083 </button>\
+          <button onclick="selectStatus('\uc0\u1054 ', this)">\u1054 \u1090 \u1089 \u1091 \u1090 \u1089 \u1090 \u1074 \u1086 \u1074 \u1072 \u1083 </button>\
+          <button onclick="selectStatus('\uc0\u1041 ', this)">\u1041 \u1086 \u1083 \u1077 \u1085 </button>\
+          <button onclick="selectStatus('\uc0\u1040 ', this)">\u1040 \u1076 \u1072 \u1087 \u1090 \u1072 \u1094 \u1080 \u1103 </button>\
+        </div>\
+        <div id="adaptation-details" style="display: none;">\
+          <hr><label>\uc0\u1055 \u1088 \u1080 \u1093 \u1086 \u1076 : <input type="time" id="time-in"></label><br><br><label>\u1059 \u1093 \u1086 \u1076 : <input type="time" id="time-out"></label>\
+        </div>\
+      </div>\
+      <div class="modal-footer"><button onclick="saveStatus()">\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1080 \u1090 \u1100 </button></div>\
+    </div>\
+  </div>\
+\
+  <div id="edit-child-modal" class="modal">\
+    <div class="modal-content">\
+      <div class="modal-header"><span class="close-btn" onclick="closeModal('edit-child-modal')">&times;</span><h2>\uc0\u1056 \u1077 \u1076 \u1072 \u1082 \u1090 \u1080 \u1088 \u1086 \u1074 \u1072 \u1090 \u1100  \u1076 \u1072 \u1085 \u1085 \u1099 \u1077 </h2></div>\
+      <form id="edit-child-form">\
+        <div class="modal-body">\
+          <input type="hidden" id="edit-child-id">\
+          <label for="edit-fio">\uc0\u1060 \u1048 \u1054 :</label><input type="text" id="edit-fio" required>\
+          <label for="edit-group-select">\uc0\u1043 \u1088 \u1091 \u1087 \u1087 \u1072 :</label><select id="edit-group-select" required></select>\
+          <label for="edit-tariff">\uc0\u1058 \u1072 \u1088 \u1080 \u1092 :</label><input type="number" id="edit-tariff" required>\
+        </div>\
+        <div class="modal-footer"><button type="submit">\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1080 \u1090 \u1100  \u1080 \u1079 \u1084 \u1077 \u1085 \u1077 \u1085 \u1080 \u1103 </button></div>\
+      </form>\
+    </div>\
+  </div>\
+\
+  <script>\
+    // \uc0\u1048 \u1085 \u1080 \u1094 \u1080 \u1072 \u1083 \u1080 \u1079 \u1072 \u1094 \u1080 \u1103  Telegram Mini App\
+    if (window.Telegram && window.Telegram.WebApp) \{\
+      window.Telegram.WebApp.ready();\
+      window.Telegram.WebApp.expand();\
+    \}\
+\
+    // ===== \uc0\u1042 \u1040 \u1064 \u1040  \u1057 \u1057 \u1067 \u1051 \u1050 \u1040  \u1053 \u1040  API \u1059 \u1046 \u1045  \u1042 \u1057 \u1058 \u1040 \u1042 \u1051 \u1045 \u1053 \u1040  \u1053 \u1048 \u1046 \u1045  =====\
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzD74LdmAtJfrkA4m_HyNNwgbri0oHFW7lTW032evfXTEE0snJVgDcoV37kdcwfl-y3/exec';\
+\
+    let currentMonday = getMonday(new Date());\
+    let modalContext = \{\};\
+    let attendanceChanges = \{\};\
+    let allHistoryPayments = [];\
+    let allKidsData = [];\
+    let attendanceChart = null;\
+\
+    // \uc0\u1053 \u1086 \u1074 \u1072 \u1103  \u1094 \u1077 \u1085 \u1090 \u1088 \u1072 \u1083 \u1080 \u1079 \u1086 \u1074 \u1072 \u1085 \u1085 \u1072 \u1103  \u1092 \u1091 \u1085 \u1082 \u1094 \u1080 \u1103  \u1076 \u1083 \u1103  \u1074 \u1089 \u1077 \u1093  \u1079 \u1072 \u1087 \u1088 \u1086 \u1089 \u1086 \u1074  \u1082  API\
+    async function callApi(action, payload = \{\}) \{\
+      try \{\
+        const response = await fetch(API_URL, \{\
+          method: 'POST',\
+          headers: \{ 'Content-Type': 'text/plain;charset=utf-8' \},\
+          body: JSON.stringify(\{ action, payload \}),\
+          redirect: 'follow'\
+        \});\
+        if (!response.ok) throw new Error(`\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1089 \u1077 \u1090 \u1080 : $\{response.statusText\}`);\
+        const result = await response.json();\
+        if (!result.success) throw new Error(result.message || '\uc0\u1053 \u1077 \u1080 \u1079 \u1074 \u1077 \u1089 \u1090 \u1085 \u1072 \u1103  \u1086 \u1096 \u1080 \u1073 \u1082 \u1072  API.');\
+        return result.data;\
+      \} catch (error) \{\
+        console.error('\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1074 \u1099 \u1079 \u1086 \u1074 \u1072  API:', error);\
+        alert(`\uc0\u1055 \u1088 \u1086 \u1080 \u1079 \u1086 \u1096 \u1083 \u1072  \u1086 \u1096 \u1080 \u1073 \u1082 \u1072 : $\{error.message\}`);\
+        throw error;\
+      \}\
+    \}\
+\
+    document.addEventListener('DOMContentLoaded', onPageLoad);\
+    document.getElementById('add-child-form').addEventListener('submit', handleAddChildSubmit);\
+    document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);\
+    document.getElementById('add-expense-form').addEventListener('submit', handleAddExpenseSubmit);\
+    document.getElementById('edit-child-form').addEventListener('submit', handleUpdateChildSubmit);\
+    document.getElementById('avg-check-month-filter').addEventListener('change', displayAverageCheck);\
+    document.getElementById('chart-month-filter').addEventListener('change', updateAttendanceChart);\
+    document.getElementById('history-kid-filter').addEventListener('change', renderPaymentHistory);\
+    document.getElementById('history-month-filter').addEventListener('change', renderPaymentHistory);\
+    document.getElementById('summary-month-filter').addEventListener('change', updateFinancialSummary);\
+    document.getElementById('expense-month-filter').addEventListener('change', updateExpenseHistory);\
+\
+    function onPageLoad() \{\
+      fetchAndDisplayAttendance();\
+      loadInitialFinanceData();\
+    \}\
+\
+    function showView(viewId, navLink) \{\
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));\
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));\
+      document.getElementById(viewId).classList.add('active');\
+      navLink.classList.add('active');\
+      \
+      if (viewId === 'finance-view') loadInitialFinanceData();\
+      else if (viewId === 'summary-view') updateSummaryView();\
+      else if (viewId === 'expenses-view') loadExpensesView();\
+    \}\
+\
+    function loadInitialFinanceData() \{\
+        populateFinanceDropdowns();\
+        updateFinancialSummary();\
+        loadPaymentHistory();\
+        loadAndDisplayChildren();\
+    \}\
+\
+    async function loadAndDisplayChildren() \{\
+        try \{\
+            const kids = await callApi('getKids');\
+            allKidsData = kids;\
+            const container = document.getElementById('child-list');\
+            container.innerHTML = '';\
+            if (kids.length === 0) \{\
+                container.innerHTML = '<p>\uc0\u1044 \u1077 \u1090 \u1080  \u1077 \u1097 \u1077  \u1085 \u1077  \u1076 \u1086 \u1073 \u1072 \u1074 \u1083 \u1077 \u1085 \u1099 .</p>';\
+                return;\
+            \}\
+            kids.forEach(kid => \{\
+                const item = document.createElement('div');\
+                item.className = 'child-item';\
+                if (kid.status !== '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ') item.classList.add('inactive');\
+                const statusBtnClass = kid.status === '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ' ? 'btn-deactivate' : 'btn-activate';\
+                const statusBtnText = kid.status === '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ' ? '\u1044 \u1077 \u1072 \u1082 \u1090 \u1080 \u1074 \u1080 \u1088 \u1086 \u1074 \u1072 \u1090 \u1100 ' : '\u1040 \u1082 \u1090 \u1080 \u1074 \u1080 \u1088 \u1086 \u1074 \u1072 \u1090 \u1100 ';\
+                item.innerHTML = `\
+                    <div class="child-item-details">\
+                        <span class="child-item-fio">$\{kid.fio\}</span>\
+                        <span class="child-item-sub">\uc0\u1058 \u1072 \u1088 \u1080 \u1092 : $\{kid.tariff\} \u8381  | \u1057 \u1090 \u1072 \u1090 \u1091 \u1089 : $\{kid.status\}</span>\
+                    </div>\
+                    <div class="child-item-actions">\
+                        <button class="btn btn-small btn-edit" onclick="openEditChildModal('$\{kid.id\}', '$\{kid.fio\}', '$\{kid.group\}', '$\{kid.tariff\}')">\uc0\u1048 \u1079 \u1084 \u1077 \u1085 \u1080 \u1090 \u1100 </button>\
+                        <button class="btn btn-small $\{statusBtnClass\}" onclick="toggleChildStatus('$\{kid.id\}', '$\{kid.status\}')">$\{statusBtnText\}</button>\
+                    </div>`;\
+                container.appendChild(item);\
+            \});\
+        \} catch (error) \{\
+            document.getElementById('child-list').innerHTML = '<p>\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1079 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1080  \u1089 \u1087 \u1080 \u1089 \u1082 \u1072  \u1076 \u1077 \u1090 \u1077 \u1081 .</p>';\
+        \}\
+    \}\
+\
+    function openEditChildModal(id, fio, group, tariff) \{\
+        document.getElementById('edit-child-id').value = id;\
+        document.getElementById('edit-fio').value = fio;\
+        document.getElementById('edit-tariff').value = tariff;\
+        const groupSelect = document.getElementById('edit-group-select');\
+        if (groupSelect.options.length <= 1) \{\
+            groupSelect.innerHTML = document.getElementById('group-select').innerHTML;\
+        \}\
+        groupSelect.value = group;\
+        document.getElementById('edit-child-modal').style.display = 'block';\
+    \}\
+\
+    async function handleUpdateChildSubmit(e) \{\
+        e.preventDefault();\
+        const form = e.target;\
+        const button = form.querySelector('button');\
+        const childData = \{\
+            id: document.getElementById('edit-child-id').value,\
+            fio: document.getElementById('edit-fio').value,\
+            group: document.getElementById('edit-group-select').value,\
+            tariff: document.getElementById('edit-tariff').value\
+        \};\
+        button.textContent = '\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1077 \u1085 \u1080 \u1077 ...';\
+        button.disabled = true;\
+        try \{\
+            const response = await callApi('updateChild', childData);\
+            alert(response.message);\
+            form.reset();\
+            closeModal('edit-child-modal');\
+            loadInitialFinanceData();\
+        \} catch (error) \{\
+            // Error is already handled by callApi\
+        \} finally \{\
+            button.textContent = '\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1080 \u1090 \u1100  \u1080 \u1079 \u1084 \u1077 \u1085 \u1077 \u1085 \u1080 \u1103 ';\
+            button.disabled = false;\
+        \}\
+    \}\
+\
+    async function toggleChildStatus(id, currentStatus) \{\
+        const newStatus = currentStatus === '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ' ? '\u1053 \u1077 \u1072 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ' : '\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ';\
+        if (!confirm(`\uc0\u1042 \u1099  \u1091 \u1074 \u1077 \u1088 \u1077 \u1085 \u1099 , \u1095 \u1090 \u1086  \u1093 \u1086 \u1090 \u1080 \u1090 \u1077  \u1080 \u1079 \u1084 \u1077 \u1085 \u1080 \u1090 \u1100  \u1089 \u1090 \u1072 \u1090 \u1091 \u1089  \u1088 \u1077 \u1073 \u1077 \u1085 \u1082 \u1072  \u1085 \u1072  "$\{newStatus\}"?`)) return;\
+        try \{\
+            const response = await callApi('updateChild', \{ id, status: newStatus \});\
+            alert(response.message);\
+            loadInitialFinanceData();\
+        \} catch (error) \{\
+            // Error is handled by callApi\
+        \}\
+    \}\
+\
+    async function loadExpensesView() \{\
+      try \{\
+        const categories = await callApi('getExpenseCategories');\
+        const categorySelect = document.getElementById('expense-category-select');\
+        categorySelect.innerHTML = '<option value="">-- \uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1082 \u1072 \u1090 \u1077 \u1075 \u1086 \u1088 \u1080 \u1102  --</option>';\
+        categories.forEach(cat => \{\
+          const option = document.createElement('option');\
+          option.value = cat;\
+          option.textContent = cat;\
+          categorySelect.appendChild(option);\
+        \});\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+      \
+      const monthFilter = document.getElementById('expense-month-filter');\
+      const monthSelect = document.getElementById('expense-month-select');\
+      if (monthFilter.options.length === 0) \{\
+        const months = ["\uc0\u1071 \u1085 \u1074 \u1072 \u1088 \u1100 ", "\u1060 \u1077 \u1074 \u1088 \u1072 \u1083 \u1100 ", "\u1052 \u1072 \u1088 \u1090 ", "\u1040 \u1087 \u1088 \u1077 \u1083 \u1100 ", "\u1052 \u1072 \u1081 ", "\u1048 \u1102 \u1085 \u1100 ", "\u1048 \u1102 \u1083 \u1100 ", "\u1040 \u1074 \u1075 \u1091 \u1089 \u1090 ", "\u1057 \u1077 \u1085 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1054 \u1082 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1053 \u1086 \u1103 \u1073 \u1088 \u1100 ", "\u1044 \u1077 \u1082 \u1072 \u1073 \u1088 \u1100 "];\
+        months.forEach(month => \{\
+          const option = document.createElement('option');\
+          option.value = month;\
+          option.textContent = month;\
+          monthFilter.appendChild(option.cloneNode(true));\
+          monthSelect.appendChild(option);\
+        \});\
+      \}\
+      const currentMonthName = new Date().toLocaleString('ru-RU', \{ month: 'long' \});\
+      const capitalizedCurrentMonth = currentMonthName.charAt(0).toUpperCase() + currentMonthName.slice(1);\
+      monthFilter.value = capitalizedCurrentMonth;\
+      monthSelect.value = capitalizedCurrentMonth;\
+      updateExpenseHistory();\
+    \}\
+\
+    async function handleAddExpenseSubmit(e) \{\
+      e.preventDefault();\
+      const form = e.target;\
+      const button = form.querySelector('button');\
+      const payload = \{\
+        month: document.getElementById('expense-month-select').value,\
+        category: document.getElementById('expense-category-select').value,\
+        amount: document.getElementById('expense-amount').value,\
+        description: document.getElementById('expense-description').value\
+      \};\
+      button.textContent = '\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1083 \u1077 \u1085 \u1080 \u1077 ...';\
+      button.disabled = true;\
+      try \{\
+        const response = await callApi('addExpense', payload);\
+        alert(response.message);\
+        form.reset();\
+        const currentMonthName = new Date().toLocaleString('ru-RU', \{ month: 'long' \});\
+        document.getElementById('expense-month-select').value = currentMonthName.charAt(0).toUpperCase() + currentMonthName.slice(1);\
+        updateExpenseHistory();\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+      finally \{\
+        button.textContent = '\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 ';\
+        button.disabled = false;\
+      \}\
+    \}\
+\
+    async function updateExpenseHistory() \{\
+      const selectedMonth = document.getElementById('expense-month-filter').value;\
+      try \{\
+        const expenses = await callApi('getExpensesForMonth', selectedMonth);\
+        displayExpenses(expenses);\
+      \} catch (error) \{\
+        document.getElementById('expense-list').innerHTML = '<p>\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1079 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1080  \u1088 \u1072 \u1089 \u1093 \u1086 \u1076 \u1086 \u1074 .</p>';\
+      \}\
+    \}\
+\
+    function displayExpenses(expenses) \{\
+      const listContainer = document.getElementById('expense-list');\
+      const totalContainer = document.getElementById('expense-total');\
+      listContainer.innerHTML = '';\
+      let total = 0;\
+      if (expenses.length === 0) \{\
+        listContainer.innerHTML = '<p>\uc0\u1056 \u1072 \u1089 \u1093 \u1086 \u1076 \u1086 \u1074  \u1074  \u1101 \u1090 \u1086 \u1084  \u1084 \u1077 \u1089 \u1103 \u1094 \u1077  \u1085 \u1077 \u1090 .</p>';\
+        totalContainer.textContent = '0 \uc0\u8381 ';\
+        return;\
+      \}\
+      expenses.forEach(exp => \{\
+        total += exp.amount;\
+        const item = document.createElement('div');\
+        item.className = 'payment-item';\
+        item.innerHTML = `\
+          <div class="payment-item-details">\
+            <span class="payment-item-fio">$\{exp.category\}</span>\
+            <span class="payment-item-date">$\{exp.date\} - $\{exp.description || ''\}</span>\
+          </div>\
+          <span class="payment-item-amount" style="color: var(--color-absent);">$\{exp.amount.toLocaleString('ru-RU')\} \uc0\u8381 </span>`;\
+        listContainer.appendChild(item);\
+      \});\
+      totalContainer.textContent = `$\{total.toLocaleString('ru-RU')\} \uc0\u8381 `;\
+    \}\
+\
+    async function updateSummaryView() \{\
+      populateSummaryMonthFilters();\
+      displayAverageCheck();\
+      updateAttendanceChart();\
+    \}\
+\
+    function populateSummaryMonthFilters() \{\
+      const avgCheckFilter = document.getElementById('avg-check-month-filter');\
+      const chartFilter = document.getElementById('chart-month-filter');\
+      const uniqueMonths = ["\uc0\u1071 \u1085 \u1074 \u1072 \u1088 \u1100 ", "\u1060 \u1077 \u1074 \u1088 \u1072 \u1083 \u1100 ", "\u1052 \u1072 \u1088 \u1090 ", "\u1040 \u1087 \u1088 \u1077 \u1083 \u1100 ", "\u1052 \u1072 \u1081 ", "\u1048 \u1102 \u1085 \u1100 ", "\u1048 \u1102 \u1083 \u1100 ", "\u1040 \u1074 \u1075 \u1091 \u1089 \u1090 ", "\u1057 \u1077 \u1085 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1054 \u1082 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1053 \u1086 \u1103 \u1073 \u1088 \u1100 ", "\u1044 \u1077 \u1082 \u1072 \u1073 \u1088 \u1100 "];\
+      [avgCheckFilter, chartFilter].forEach(filter => \{\
+        if (filter.options.length > 0) return;\
+        filter.innerHTML = '';\
+        uniqueMonths.forEach(month => \{\
+          const option = document.createElement('option');\
+          option.value = month;\
+          option.textContent = month;\
+          filter.appendChild(option);\
+        \});\
+      \});\
+      const currentMonthName = new Date().toLocaleString('ru-RU', \{ month: 'long' \});\
+      const capitalizedCurrentMonth = currentMonthName.charAt(0).toUpperCase() + currentMonthName.slice(1);\
+      avgCheckFilter.value = capitalizedCurrentMonth;\
+      chartFilter.value = capitalizedCurrentMonth;\
+    \}\
+\
+    async function displayAverageCheck() \{\
+      const selectedMonth = document.getElementById('avg-check-month-filter').value;\
+      const resultSpan = document.getElementById('avg-check-result');\
+      resultSpan.textContent = '...';\
+      try \{\
+        const allPayments = await callApi('getPaymentHistory');\
+        const paymentsInMonth = allPayments.filter(p => p.month === selectedMonth);\
+        if (paymentsInMonth.length === 0) \{\
+          resultSpan.textContent = '0';\
+          return;\
+        \}\
+        const totalAmount = paymentsInMonth.reduce((sum, p) => sum + p.amount, 0);\
+        const uniqueKids = [...new Set(paymentsInMonth.map(p => p.kidId))];\
+        const numberOfKidsWhoPaid = uniqueKids.length;\
+        if (numberOfKidsWhoPaid === 0) \{\
+          resultSpan.textContent = '0';\
+          return;\
+        \}\
+        const average = totalAmount / numberOfKidsWhoPaid;\
+        resultSpan.textContent = average.toLocaleString('ru-RU', \{ maximumFractionDigits: 0 \});\
+      \} catch (error) \{\
+        resultSpan.textContent = '\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072 ';\
+      \}\
+    \}\
+\
+    async function updateAttendanceChart() \{\
+      const selectedMonth = document.getElementById('chart-month-filter').value;\
+      try \{\
+        const attendanceData = await callApi('getAttendanceForMonth', selectedMonth);\
+        drawAttendanceChart(attendanceData, selectedMonth);\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+    \}\
+\
+    function drawAttendanceChart(data, monthName) \{\
+      if (attendanceChart) attendanceChart.destroy();\
+      const months = ["\uc0\u1071 \u1085 \u1074 \u1072 \u1088 \u1100 ", "\u1060 \u1077 \u1074 \u1088 \u1072 \u1083 \u1100 ", "\u1052 \u1072 \u1088 \u1090 ", "\u1040 \u1087 \u1088 \u1077 \u1083 \u1100 ", "\u1052 \u1072 \u1081 ", "\u1048 \u1102 \u1085 \u1100 ", "\u1048 \u1102 \u1083 \u1100 ", "\u1040 \u1074 \u1075 \u1091 \u1089 \u1090 ", "\u1057 \u1077 \u1085 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1054 \u1082 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1053 \u1086 \u1103 \u1073 \u1088 \u1100 ", "\u1044 \u1077 \u1082 \u1072 \u1073 \u1088 \u1100 "];\
+      const monthIndex = months.indexOf(monthName);\
+      const daysInMonth = new Date(new Date().getFullYear(), monthIndex + 1, 0).getDate();\
+      const labels = Array.from(\{length: daysInMonth\}, (_, i) => i + 1);\
+      const dailyCounts = labels.map(day => data[day] || 0);\
+      const ctx = document.getElementById('attendanceChart').getContext('2d');\
+      attendanceChart = new Chart(ctx, \{\
+        type: 'bar',\
+        data: \{\
+          labels: labels,\
+          datasets: [\{\
+            label: '\uc0\u1050 \u1086 \u1083 \u1080 \u1095 \u1077 \u1089 \u1090 \u1074 \u1086  \u1076 \u1077 \u1090 \u1077 \u1081 ', data: dailyCounts,\
+            backgroundColor: 'rgba(88, 86, 214, 0.7)', borderColor: 'rgba(88, 86, 214, 1)',\
+            borderWidth: 1, borderRadius: 5\
+          \}]\
+        \},\
+        options: \{\
+          scales: \{ y: \{ beginAtZero: true, ticks: \{ stepSize: 1 \} \}, x: \{ grid: \{ display: false \} \} \},\
+          plugins: \{ legend: \{ display: false \} \}\
+        \}\
+      \});\
+    \}\
+\
+    async function loadPaymentHistory() \{\
+      try \{\
+        allHistoryPayments = await callApi('getPaymentHistory');\
+        renderPaymentHistory();\
+      \} catch (error) \{\
+        document.getElementById('payment-history-list').innerHTML = '<p>\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1079 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1080  \u1080 \u1089 \u1090 \u1086 \u1088 \u1080 \u1080 .</p>';\
+      \}\
+    \}\
+\
+    function renderPaymentHistory() \{\
+      const kidFilter = document.getElementById('history-kid-filter').value;\
+      const monthFilter = document.getElementById('history-month-filter').value;\
+      const listContainer = document.getElementById('payment-history-list');\
+      listContainer.innerHTML = '';\
+      let filteredPayments = allHistoryPayments;\
+      if (kidFilter) filteredPayments = filteredPayments.filter(p => p.kidId == kidFilter);\
+      if (monthFilter) filteredPayments = filteredPayments.filter(p => p.month === monthFilter);\
+      if (!kidFilter && !monthFilter) filteredPayments = filteredPayments.slice(0, 10);\
+      if (filteredPayments.length === 0) \{ listContainer.innerHTML = '<p>\uc0\u1055 \u1083 \u1072 \u1090 \u1077 \u1078 \u1080  \u1085 \u1077  \u1085 \u1072 \u1081 \u1076 \u1077 \u1085 \u1099 .</p>'; return; \}\
+      filteredPayments.forEach(p => \{\
+        const item = document.createElement('div');\
+        item.className = 'payment-item';\
+        const formattedDate = new Date(p.date).toLocaleDateString('ru-RU');\
+        item.innerHTML = `<div class="payment-item-details"><span class="payment-item-fio">$\{p.fio\}</span><span class="payment-item-date">$\{formattedDate\} - $\{p.month\}</span></div><span class="payment-item-amount">$\{p.amount.toLocaleString('ru-RU')\} \uc0\u8381 </span>`;\
+        listContainer.appendChild(item);\
+      \});\
+    \}\
+    \
+    function resetFilters() \{\
+      document.getElementById('history-kid-filter').value = '';\
+      document.getElementById('history-month-filter').value = '';\
+      renderPaymentHistory();\
+    \}\
+\
+    function drawTable(data) \{\
+      const \{ kids, dates, attendance \} = data;\
+      const container = document.getElementById('attendance-table-container');\
+      container.innerHTML = '';\
+      const table = document.createElement('table');\
+      const weekStart = formatDate(dates[0]);\
+      const weekEnd = formatDate(dates[4]);\
+      document.getElementById('week-display').textContent = `$\{weekStart\} - $\{weekEnd\}`;\
+      const thead = table.createTHead();\
+      const headerRow = thead.insertRow();\
+      headerRow.insertCell().textContent = '\uc0\u1060 \u1048 \u1054 ';\
+      const todayString = new Date().toISOString().split('T')[0];\
+      const weekdays = ['\uc0\u1042 \u1089 ', '\u1055 \u1085 ', '\u1042 \u1090 ', '\u1057 \u1088 ', '\u1063 \u1090 ', '\u1055 \u1090 ', '\u1057 \u1073 '];\
+      dates.forEach(date => \{\
+        const th = document.createElement('th');\
+        const dayOfWeek = weekdays[new Date(date).getUTCDay()];\
+        th.innerHTML = `$\{dayOfWeek\}<br><span style="font-size:0.9em; color: #b2bec3;">$\{formatDate(date)\}</span>`;\
+        if (date === todayString) th.classList.add('today');\
+        headerRow.appendChild(th);\
+      \});\
+      const tbody = table.createTBody();\
+      kids.forEach(kid => \{\
+        if (kid.status !== '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ') return;\
+        const row = tbody.insertRow();\
+        row.insertCell().textContent = kid.fio;\
+        dates.forEach(date => \{\
+          const cell = row.insertCell();\
+          cell.dataset.kidId = kid.id;\
+          cell.dataset.date = date;\
+          const record = attendance[kid.id] && attendance[kid.id][date];\
+          const status = record ? record.status : '';\
+          cell.innerHTML = getStatusHtml(status);\
+          cell.onclick = () => openStatusModal(kid.id, kid.fio, date, status, cell);\
+        \});\
+      \});\
+      const tfoot = table.createTFoot();\
+      const footerRow = tfoot.insertRow();\
+      footerRow.insertCell().textContent = '\uc0\u1048 \u1090 \u1086 \u1075 \u1086 :';\
+      dates.forEach(date => \{\
+        let dailyTotal = 0;\
+        kids.forEach(kid => \{\
+          if (kid.status !== '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ') return;\
+          const record = attendance[kid.id] && attendance[kid.id][date];\
+          const status = record ? record.status : '';\
+          if (status === '\uc0\u1055 ' || status === '\u1040 ') \{ dailyTotal++; \}\
+        \});\
+        const totalCell = footerRow.insertCell();\
+        totalCell.textContent = dailyTotal;\
+      \});\
+      container.appendChild(table);\
+      calculateAndDisplayAdaptationHours(kids, dates, attendance);\
+    \}\
+\
+    function calculateAndDisplayAdaptationHours(kids, dates, attendance) \{\
+      const summaryContainer = document.getElementById('adaptation-summary-container');\
+      const dailyContainer = document.getElementById('daily-adaptation-summary');\
+      const weeklyContainer = document.getElementById('weekly-adaptation-summary');\
+      dailyContainer.innerHTML = '';\
+      weeklyContainer.innerHTML = '';\
+      const weekdays = ['\uc0\u1074 \u1086 \u1089 \u1082 \u1088 \u1077 \u1089 \u1077 \u1085 \u1100 \u1077 ', '\u1087 \u1086 \u1085 \u1077 \u1076 \u1077 \u1083 \u1100 \u1085 \u1080 \u1082 ', '\u1074 \u1090 \u1086 \u1088 \u1085 \u1080 \u1082 ', '\u1089 \u1088 \u1077 \u1076 \u1091 ', '\u1095 \u1077 \u1090 \u1074 \u1077 \u1088 \u1075 ', '\u1087 \u1103 \u1090 \u1085 \u1080 \u1094 \u1091 ', '\u1089 \u1091 \u1073 \u1073 \u1086 \u1090 \u1091 '];\
+      let weeklyTotals = \{\};\
+      let hasAdaptationRecords = false;\
+      kids.forEach(kid => \{\
+        dates.forEach(date => \{\
+          const record = attendance[kid.id] && attendance[kid.id][date];\
+          if (record && record.status === '\uc0\u1040 ' && record.timeIn && record.timeOut) \{\
+            hasAdaptationRecords = true;\
+            const [inH, inM] = record.timeIn.split(':');\
+            const [outH, outM] = record.timeOut.split(':');\
+            const diffMinutes = (outH * 60 + +outM) - (inH * 60 + +inM);\
+            if (diffMinutes > 0) \{\
+              const hours = Math.floor(diffMinutes / 60);\
+              const minutes = diffMinutes % 60;\
+              const dayOfWeek = weekdays[new Date(date).getUTCDay()];\
+              const pDaily = document.createElement('p');\
+              pDaily.textContent = `$\{kid.fio\} \'97 \uc0\u1074  $\{dayOfWeek\}: $\{hours\} \u1095  $\{minutes\} \u1084 \u1080 \u1085  \u1085 \u1072  \u1072 \u1076 \u1072 \u1087 \u1090 \u1072 \u1094 \u1080 \u1080 .`;\
+              dailyContainer.appendChild(pDaily);\
+              if (!weeklyTotals[kid.id]) weeklyTotals[kid.id] = \{ name: kid.fio, totalMinutes: 0 \};\
+              weeklyTotals[kid.id].totalMinutes += diffMinutes;\
+            \}\
+          \}\
+        \});\
+      \});\
+      if (hasAdaptationRecords) \{\
+        Object.values(weeklyTotals).forEach(total => \{\
+          const hours = Math.floor(total.totalMinutes / 60);\
+          const minutes = total.totalMinutes % 60;\
+          const pWeekly = document.createElement('p');\
+          pWeekly.textContent = `\uc0\u1048 \u1090 \u1086 \u1075 \u1086  \u1079 \u1072  \u1085 \u1077 \u1076 \u1077 \u1083 \u1102  \u1076 \u1083 \u1103  $\{total.name\}: $\{hours\} \u1095  $\{minutes\} \u1084 \u1080 \u1085 .`;\
+          weeklyContainer.appendChild(pWeekly);\
+        \});\
+        summaryContainer.style.display = 'block';\
+      \} else \{\
+        summaryContainer.style.display = 'none';\
+      \}\
+    \}\
+\
+    function getStatusHtml(status) \{\
+      switch (status) \{\
+        case '\uc0\u1055 ': return '<span class="status-icon status-present">&#10004;</span>';\
+        case '\uc0\u1054 ': return '<span class="status-icon status-absent">&#10006;</span>';\
+        case '\uc0\u1041 ': return '<span class="status-icon status-sick">\u1041 </span>';\
+        case '\uc0\u1040 ': return '<span class="status-icon status-adaptation">\u1040 </span>';\
+        default: return '';\
+      \}\
+    \}\
+\
+    function openStatusModal(kidId, kidFio, date, currentStatus, cellElement) \{\
+      modalContext = \{ kidId, kidFio, date, currentStatus, cell: cellElement \};\
+      document.getElementById('modal-kid-info').textContent = `$\{kidFio\} - $\{formatDate(date)\}`;\
+      document.getElementById('adaptation-details').style.display = 'none';\
+      document.getElementById('time-in').value = '';\
+      document.getElementById('time-out').value = '';\
+      document.querySelectorAll('.status-buttons button').forEach(btn => btn.classList.remove('selected'));\
+      document.getElementById('status-modal').style.display = 'block';\
+    \}\
+\
+    function selectStatus(status, clickedButton) \{\
+      modalContext.selectedStatus = status;\
+      document.querySelectorAll('.status-buttons button').forEach(btn => btn.classList.remove('selected'));\
+      clickedButton.classList.add('selected');\
+      document.getElementById('adaptation-details').style.display = (status === '\uc0\u1040 ') ? 'block' : 'none';\
+    \}\
+\
+    function saveStatus() \{\
+      const \{ kidId, date, selectedStatus, cell \} = modalContext;\
+      if (!selectedStatus) \{ alert('\uc0\u1055 \u1086 \u1078 \u1072 \u1083 \u1091 \u1081 \u1089 \u1090 \u1072 , \u1074 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1089 \u1090 \u1072 \u1090 \u1091 \u1089 .'); return; \}\
+      const timeIn = document.getElementById('time-in').value;\
+      const timeOut = document.getElementById('time-out').value;\
+      const changeKey = `$\{kidId\}-$\{date\}`;\
+      attendanceChanges[changeKey] = \{ kidId, date, status: selectedStatus, timeIn, timeOut \};\
+      cell.innerHTML = getStatusHtml(selectedStatus);\
+      closeModal('status-modal');\
+      document.getElementById('save-attendance-btn').style.display = 'block';\
+    \}\
+\
+    async function saveAllChanges() \{\
+      const changesArray = Object.values(attendanceChanges);\
+      if (changesArray.length === 0) \{ alert("\uc0\u1053 \u1077 \u1090  \u1085 \u1077 \u1089 \u1086 \u1093 \u1088 \u1072 \u1085 \u1077 \u1085 \u1085 \u1099 \u1093  \u1080 \u1079 \u1084 \u1077 \u1085 \u1077 \u1085 \u1080 \u1081 ."); return; \}\
+      const btn = document.getElementById('save-attendance-btn');\
+      btn.textContent = '\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1077 \u1085 \u1080 \u1077 ...';\
+      btn.disabled = true;\
+      try \{\
+        const response = await callApi('saveBulkAttendance', changesArray);\
+        alert(response.message);\
+        attendanceChanges = \{\};\
+        btn.style.display = 'none';\
+        fetchAndDisplayAttendance();\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+      finally \{\
+        btn.textContent = '\uc0\u1057 \u1086 \u1093 \u1088 \u1072 \u1085 \u1080 \u1090 \u1100  \u1080 \u1079 \u1084 \u1077 \u1085 \u1077 \u1085 \u1080 \u1103 ';\
+        btn.disabled = false;\
+      \}\
+    \}\
+\
+    async function populateFinanceDropdowns() \{\
+      try \{\
+        const [kids, groups] = await Promise.all([callApi('getKids'), callApi('getGroups')]);\
+        allKidsData = kids;\
+        const kidSelect = document.getElementById('kid-select');\
+        const historyKidSelect = document.getElementById('history-kid-filter');\
+        [kidSelect, historyKidSelect].forEach(select => \{\
+          const currentVal = select.value;\
+          select.innerHTML = '';\
+          const defaultOption = document.createElement('option');\
+          defaultOption.value = '';\
+          defaultOption.textContent = select.id === 'history-kid-filter' ? '\uc0\u1042 \u1089 \u1077  \u1076 \u1077 \u1090 \u1080 ' : '-- \u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  --';\
+          select.appendChild(defaultOption);\
+          kids.forEach(kid => \{ \
+            if (select.id === 'kid-select' && kid.status !== '\uc0\u1040 \u1082 \u1090 \u1080 \u1074 \u1077 \u1085 ') return;\
+            const option = document.createElement('option'); \
+            option.value = kid.id; \
+            option.textContent = kid.fio; \
+            select.appendChild(option); \
+          \});\
+          select.value = currentVal;\
+        \});\
+        const groupSelects = [document.getElementById('group-select'), document.getElementById('edit-group-select')];\
+        groupSelects.forEach(select => \{\
+            select.innerHTML = '<option value="">-- \uc0\u1042 \u1099 \u1073 \u1077 \u1088 \u1080 \u1090 \u1077  \u1075 \u1088 \u1091 \u1087 \u1087 \u1091  --</option>';\
+            groups.forEach(groupName => \{\
+              const option = document.createElement('option');\
+              option.value = groupName;\
+              option.textContent = groupName;\
+              select.appendChild(option);\
+            \});\
+        \});\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+      \
+      const monthSelects = [document.getElementById('month-select'), document.getElementById('history-month-filter'), document.getElementById('summary-month-filter')];\
+      const months = ["\uc0\u1071 \u1085 \u1074 \u1072 \u1088 \u1100 ", "\u1060 \u1077 \u1074 \u1088 \u1072 \u1083 \u1100 ", "\u1052 \u1072 \u1088 \u1090 ", "\u1040 \u1087 \u1088 \u1077 \u1083 \u1100 ", "\u1052 \u1072 \u1081 ", "\u1048 \u1102 \u1085 \u1100 ", "\u1048 \u1102 \u1083 \u1100 ", "\u1040 \u1074 \u1075 \u1091 \u1089 \u1090 ", "\u1057 \u1077 \u1085 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1054 \u1082 \u1090 \u1103 \u1073 \u1088 \u1100 ", "\u1053 \u1086 \u1103 \u1073 \u1088 \u1100 ", "\u1044 \u1077 \u1082 \u1072 \u1073 \u1088 \u1100 "];\
+      const currentMonthName = new Date().toLocaleString('ru-RU', \{ month: 'long' \});\
+      const capitalizedCurrentMonth = currentMonthName.charAt(0).toUpperCase() + currentMonthName.slice(1);\
+      monthSelects.forEach(select => \{\
+        if (select.options.length > 1) \{ select.value = capitalizedCurrentMonth; return; \}\
+        select.innerHTML = '';\
+        if (select.id === 'history-month-filter') \{\
+          select.innerHTML = '<option value="">\uc0\u1042 \u1089 \u1077  \u1084 \u1077 \u1089 \u1103 \u1094 \u1099 </option>';\
+        \}\
+        months.forEach(month => \{\
+          const option = document.createElement('option');\
+          option.value = month;\
+          option.textContent = month;\
+          select.appendChild(option);\
+        \});\
+        select.value = capitalizedCurrentMonth;\
+      \});\
+    \}\
+    \
+    async function handleAddPaymentSubmit(e) \{\
+      e.preventDefault();\
+      const form = e.target;\
+      const button = form.querySelector('button');\
+      const payload = \{\
+        kidId: document.getElementById('kid-select').value,\
+        month: document.getElementById('month-select').value,\
+        amount: document.getElementById('amount').value\
+      \};\
+      button.textContent = '\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1083 \u1077 \u1085 \u1080 \u1077 ...';\
+      button.disabled = true;\
+      try \{\
+        const response = await callApi('recordPayment', payload);\
+        alert(response.message);\
+        form.reset();\
+        updateFinancialSummary();\
+        loadPaymentHistory();\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+      finally \{\
+        button.textContent = '\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1087 \u1083 \u1072 \u1090 \u1105 \u1078 ';\
+        button.disabled = false;\
+      \}\
+    \}\
+\
+    async function handleAddChildSubmit(e) \{\
+      e.preventDefault();\
+      const form = e.target;\
+      const button = form.querySelector('button');\
+      const payload = \{\
+        fio: document.getElementById('fio').value,\
+        group: document.getElementById('group-select').value,\
+        tariff: document.getElementById('tariff').value\
+      \};\
+      button.textContent = '\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1083 \u1077 \u1085 \u1080 \u1077 ...';\
+      button.disabled = true;\
+      try \{\
+        const response = await callApi('addNewChild', payload);\
+        alert(response.message);\
+        form.reset();\
+        loadInitialFinanceData();\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+      finally \{\
+        button.textContent = '\uc0\u1044 \u1086 \u1073 \u1072 \u1074 \u1080 \u1090 \u1100  \u1088 \u1077 \u1073 \u1105 \u1085 \u1082 \u1072 ';\
+        button.disabled = false;\
+      \}\
+    \}\
+    \
+    async function updateFinancialSummary() \{\
+      const selectedMonth = document.getElementById('summary-month-filter').value;\
+      document.getElementById('expected-income').textContent = '...';\
+      document.getElementById('actual-income').textContent = '...';\
+      document.getElementById('debtors-list').innerHTML = '<p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p>';\
+      document.getElementById('overpayments-list').innerHTML = '<p>\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...</p>';\
+      try \{\
+        const summary = await callApi('getFinancialSummary', selectedMonth);\
+        displayFinancialSummary(summary);\
+      \} catch (error) \{ /* Handled by callApi */ \}\
+    \}\
+\
+    function displayFinancialSummary(summary) \{\
+      document.getElementById('expected-income').textContent = summary.totalExpected.toLocaleString('ru-RU');\
+      document.getElementById('actual-income').textContent = summary.totalReceived.toLocaleString('ru-RU');\
+      const debtorsList = document.getElementById('debtors-list');\
+      debtorsList.innerHTML = '';\
+      if (summary.debtors.length === 0) \{\
+        debtorsList.innerHTML = '<p>\uc0\u1047 \u1072 \u1076 \u1086 \u1083 \u1078 \u1077 \u1085 \u1085 \u1086 \u1089 \u1090 \u1077 \u1081  \u1085 \u1077 \u1090 .</p>';\
+      \} else \{\
+        summary.debtors.forEach(debtor => \{\
+          const p = document.createElement('p');\
+          p.textContent = `$\{debtor.fio\} \'96 \uc0\u1076 \u1086 \u1083 \u1075  $\{debtor.debt.toLocaleString('ru-RU')\} \u8381 `;\
+          debtorsList.appendChild(p);\
+        \});\
+      \}\
+      const overpaymentsList = document.getElementById('overpayments-list');\
+      overpaymentsList.innerHTML = '';\
+      if (summary.overpayments.length === 0) \{\
+        overpaymentsList.innerHTML = '<p>\uc0\u1055 \u1077 \u1088 \u1077 \u1087 \u1083 \u1072 \u1090  \u1085 \u1077 \u1090 .</p>';\
+      \} else \{\
+        summary.overpayments.forEach(op => \{\
+          const p = document.createElement('p');\
+          p.textContent = `$\{op.fio\} \'96 \uc0\u1087 \u1077 \u1088 \u1077 \u1087 \u1083 \u1072 \u1090 \u1072  $\{op.amount.toLocaleString('ru-RU')\} \u8381 `;\
+          overpaymentsList.appendChild(p);\
+        \});\
+      \}\
+    \}\
+\
+    function getMonday(d) \{ d = new Date(d); const day = d.getDay(), diff = d.getDate() - day + (day === 0 ? -6 : 1); return new Date(d.setDate(diff)); \}\
+    function formatDate(dateString) \{ const date = new Date(dateString); const day = ('0' + date.getDate()).slice(-2); const month = ('0' + (date.getMonth() + 1)).slice(-2); return `$\{day\}.$\{month\}`; \}\
+    function closeModal(modalId) \{ document.getElementById(modalId).style.display = 'none'; \}\
+    \
+    async function fetchAndDisplayAttendance() \{\
+      const dateString = currentMonday.toISOString().split('T')[0];\
+      document.getElementById('week-display').textContent = '\uc0\u1047 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1072 ...';\
+      try \{\
+        const data = await callApi('getAttendanceDataForWeek', dateString);\
+        drawTable(data);\
+      \} catch (error) \{\
+        document.getElementById('attendance-table-container').innerHTML = '<p>\uc0\u1054 \u1096 \u1080 \u1073 \u1082 \u1072  \u1079 \u1072 \u1075 \u1088 \u1091 \u1079 \u1082 \u1080  \u1076 \u1072 \u1085 \u1085 \u1099 \u1093  \u1086  \u1087 \u1086 \u1089 \u1077 \u1097 \u1072 \u1077 \u1084 \u1086 \u1089 \u1090 \u1080 .</p>';\
+      \}\
+    \}\
+\
+    function changeWeek(days) \{\
+      if (Object.keys(attendanceChanges).length > 0) \{\
+        if (!confirm("\uc0\u1059  \u1074 \u1072 \u1089  \u1077 \u1089 \u1090 \u1100  \u1085 \u1077 \u1089 \u1086 \u1093 \u1088 \u1072 \u1085 \u1077 \u1085 \u1085 \u1099 \u1077  \u1080 \u1079 \u1084 \u1077 \u1085 \u1077 \u1085 \u1080 \u1103 . \u1045 \u1089 \u1083 \u1080  \u1074 \u1099  \u1087 \u1077 \u1088 \u1077 \u1082 \u1083 \u1102 \u1095 \u1080 \u1090 \u1077  \u1085 \u1077 \u1076 \u1077 \u1083 \u1102 , \u1086 \u1085 \u1080  \u1073 \u1091 \u1076 \u1091 \u1090  \u1087 \u1086 \u1090 \u1077 \u1088 \u1103 \u1085 \u1099 . \u1055 \u1088 \u1086 \u1076 \u1086 \u1083 \u1078 \u1080 \u1090 \u1100 ?")) return;\
+      \}\
+      attendanceChanges = \{\};\
+      document.getElementById('save-attendance-btn').style.display = 'none';\
+      currentMonday.setDate(currentMonday.getDate() + days);\
+      fetchAndDisplayAttendance();\
+    \}\
+  </script>\
+</body>\
+</html>}
