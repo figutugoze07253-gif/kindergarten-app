@@ -87,7 +87,6 @@
   </style>
 </head>
 <body>
-  <!-- СОДЕРЖИМОЕ СТРАНИЦЫ ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ -->
   <div class="top-nav">
     <a class="nav-link active" onclick="showView('attendance-view', this)"><i class='bx bx-calendar-check'></i> <span class="nav-text">Посещаемость</span></a>
     <a class="nav-link" onclick="showView('finance-view', this)"><i class='bx bx-ruble'></i> <span class="nav-text">Финансы</span></a>
@@ -266,14 +265,13 @@
     let attendanceChart = null;
     let expensesPieChart = null;
 
-    // ИЗМЕНЕНИЕ: Добавлен параметр redirect: 'error' для более точной диагностики
     async function callApi(action, payload = {}) {
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action, payload }),
-          redirect: 'error' // Это изменение не даст браузеру следовать за редиректом 302
+          redirect: 'error'
         });
         if (!response.ok) throw new Error(`Ошибка сети: ${response.statusText}`);
         const result = await response.json();
@@ -286,7 +284,6 @@
       }
     }
 
-    // Остальной JavaScript код остается без изменений
     document.addEventListener('DOMContentLoaded', onPageLoad);
     document.getElementById('add-child-form').addEventListener('submit', handleAddChildSubmit);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);
@@ -558,7 +555,7 @@
         const data = Object.values(expensesData);
 
         if (labels.length === 0) {
-            // Можно показать сообщение, если нет данных
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             return;
         }
 
@@ -752,6 +749,8 @@
           }
         });
       });
+      
+      // ИСПРАВЛЕНИЕ: Блок будет показан только если есть записи
       if (hasAdaptationRecords) {
         Object.values(weeklyTotals).forEach(total => {
           const hours = Math.floor(total.totalMinutes / 60);
