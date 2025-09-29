@@ -96,6 +96,8 @@
 
   <div class="main-content">
     <div id="attendance-view" class="view active">
+      <!-- ИЗМЕНЕНИЕ ДЛЯ ТЕСТА -->
+      <h1>ПРОВЕРКА ОБНОВЛЕНИЯ v2</h1>
       <div class="card">
         <div class="card-header"><i class='bx bx-calendar-check'></i><h3>Посещаемость</h3></div>
         <div id="controls">
@@ -284,6 +286,7 @@
       }
     }
 
+    // Остальной JavaScript код остается без изменений
     document.addEventListener('DOMContentLoaded', onPageLoad);
     document.getElementById('add-child-form').addEventListener('submit', handleAddChildSubmit);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);
@@ -750,7 +753,6 @@
         });
       });
       
-      // ИСПРАВЛЕНИЕ: Блок будет показан только если есть записи
       if (hasAdaptationRecords) {
         Object.values(weeklyTotals).forEach(total => {
           const hours = Math.floor(total.totalMinutes / 60);
