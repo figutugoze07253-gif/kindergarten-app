@@ -15,7 +15,7 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* НОВАЯ ДИЗАЙН-СИСТЕМА */
+    /* ДИЗАЙН-СИСТЕМА */
     :root {
       --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       --bg-color: #f7f8fc;
@@ -68,8 +68,8 @@
     .payment-item-fio, .child-item-fio, .summary-item-label { font-weight: 500; }
     .payment-item-amount, .summary-item-amount { font-size: 1.1em; font-weight: 600; }
     
-    /* СТИЛИ ДЛЯ СВОДКИ */
-    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+    /* ИСПРАВЛЕНИЕ: Улучшенная и более стабильная сетка */
+    .grid-container { display: grid; grid-template-columns: 1fr; gap: 25px; }
     .kpi-card { padding: 20px; text-align: center; }
     .kpi-icon { font-size: 2.5em; margin-bottom: 10px; }
     .kpi-label { font-size: 1em; font-weight: 500; color: var(--text-color-secondary); margin-bottom: 5px; }
@@ -77,12 +77,14 @@
     .profit { color: var(--color-profit); }
     .loss { color: var(--color-loss); }
     .summary-total { font-size: 1.5em; font-weight: 700; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-border-color); display: flex; justify-content: space-between; }
+    .loading-placeholder { min-height: 100px; }
 
+    /* Медиа-запросы для больших экранов */
     @media (min-width: 768px) {
       .top-nav a .nav-text { display: inline; }
-      .summary-view .grid-container { grid-template-columns: repeat(3, 1fr); }
-      .summary-view .grid-container .card:nth-child(2) { grid-column: span 2; }
-      .summary-view .grid-container .card:nth-child(3) { grid-column: span 3; }
+      .finance-view .grid-container, .expenses-view .grid-container { grid-template-columns: 1fr 1fr; }
+      .finance-view .grid-container .card.full-width { grid-column: 1 / -1; }
+      .summary-view .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 25px; }
     }
   </style>
 </head>
@@ -97,18 +99,12 @@
   <div class="main-content">
     <div id="attendance-view" class="view active">
       <div class="card">
-        <div class="card-header">
-          <i class='bx bx-calendar-check'></i>
-          <h3>Посещаемость</h3>
-        </div>
+        <div class="card-header"><i class='bx bx-calendar-check'></i><h3>Посещаемость</h3></div>
         <div id="controls">
           <div id="week-display">Загрузка...</div>
-          <div style="display: flex; gap: 10px;">
-            <button onclick="changeWeek(-7)">&lt;</button>
-            <button onclick="changeWeek(7)">&gt;</button>
-          </div>
+          <div style="display: flex; gap: 10px;"><button onclick="changeWeek(-7)">&lt;</button><button onclick="changeWeek(7)">&gt;</button></div>
         </div>
-        <div id="attendance-table-container" class="table-responsive-wrapper"><p>Загрузка...</p></div>
+        <div id="attendance-table-container" class="table-responsive-wrapper loading-placeholder"><p>Загрузка...</p></div>
         <div id="adaptation-summary-container" style="margin-top: 20px; display: none;">
           <hr style="border: none; border-top: 1px solid var(--light-border-color); margin-bottom: 20px;">
           <h4>Сводка по адаптации за неделю:</h4>
@@ -138,14 +134,13 @@
             <button type="submit"><i class='bx bx-user-plus'></i>Добавить ребёнка</button>
           </form>
         </div>
-        <div class="card" style="grid-column: 1 / -1;">
+        <div class="card full-width">
           <div class="card-header"><i class='bx bx-group'></i><h3>Управление детьми</h3></div>
-          <div id="child-list"><p>Загрузка...</p></div>
+          <div id="child-list" class="loading-placeholder"><p>Загрузка...</p></div>
         </div>
-        <div class="card" style="grid-column: 1 / -1;">
+        <div class="card full-width">
           <div class="card-header"><i class='bx bx-bar-chart-alt-2'></i><h3>Сводка по детям</h3></div>
-          <label for="summary-month-filter">Выберите месяц:</label>
-          <select id="summary-month-filter"></select>
+          <label for="summary-month-filter">Выберите месяц:</label><select id="summary-month-filter"></select>
           <p>План: <span id="expected-income">...</span> ₽</p>
           <p>Факт: <span id="actual-income">...</span> ₽</p>
           <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 20px 0;">
@@ -154,7 +149,7 @@
           <h4 style="margin-top: 20px;">Переплаты:</h4>
           <div id="overpayments-list"><p>Загрузка...</p></div>
         </div>
-        <div class="card" style="grid-column: 1 / -1;">
+        <div class="card full-width">
           <div class="card-header"><i class='bx bx-history'></i><h3>История платежей</h3></div>
           <div class="history-filters">
             <div><label for="history-kid-filter">Ребёнок:</label><select id="history-kid-filter"></select></div>
@@ -162,7 +157,7 @@
           </div>
           <button onclick="resetFilters()"><i class='bx bx-reset'></i>Сбросить фильтры</button>
           <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 20px 0;">
-          <div id="payment-history-list"><p>Загрузка...</p></div>
+          <div id="payment-history-list" class="loading-placeholder"><p>Загрузка...</p></div>
         </div>
       </div>
     </div>
@@ -181,7 +176,7 @@
         <div class="card">
           <div class="card-header"><i class='bx bx-history'></i><h3>История расходов</h3></div>
           <label for="expense-month-filter">Выберите месяц:</label><select id="expense-month-filter"></select>
-          <div id="expense-list" style="margin-top: 15px;"></div>
+          <div id="expense-list" class="loading-placeholder" style="margin-top: 15px;"></div>
           <h4 style="margin-top: 20px; text-align: right;">Итого: <span id="expense-total" style="color: var(--primary-color);">0 ₽</span></h4>
         </div>
       </div>
@@ -191,7 +186,7 @@
         <label for="overall-summary-month-filter">Выберите месяц для сводки:</label>
         <select id="overall-summary-month-filter"></select>
       </div>
-      <div class="grid-container">
+      <div class="kpi-grid">
         <div class="card kpi-card">
           <i class='bx bx-trending-up kpi-icon profit'></i>
           <div class="kpi-label">Общий приход</div>
@@ -207,13 +202,15 @@
           <div class="kpi-label">Остаток (Прибыль)</div>
           <div class="kpi-value" id="summary-remaining">...</div>
         </div>
-        <div class="card" style="grid-column: 1 / -1;">
+      </div>
+      <div class="grid-container">
+        <div class="card">
           <div class="card-header"><i class='bx bx-pie-chart-alt-2'></i><h3>Расходы по категориям</h3></div>
-          <div style="max-width: 400px; margin: 0 auto;"><canvas id="expensesPieChart"></canvas></div>
+          <div class="loading-placeholder" style="max-width: 400px; margin: 0 auto;"><canvas id="expensesPieChart"></canvas></div>
         </div>
-        <div class="card" style="grid-column: 1 / -1;">
-          <div class="card-header"><i class='bx bx-bar-chart-square'></i><h3>Посещаемость по дням месяца</h3></div>
-          <canvas id="attendanceChart"></canvas>
+        <div class="card">
+          <div class="card-header"><i class='bx bx-bar-chart-square'></i><h3>Посещаемость по дням</h3></div>
+          <div class="loading-placeholder"><canvas id="attendanceChart"></canvas></div>
         </div>
       </div>
     </div>
