@@ -68,7 +68,6 @@
     .payment-item-fio, .child-item-fio, .summary-item-label { font-weight: 500; }
     .payment-item-amount, .summary-item-amount { font-size: 1.1em; font-weight: 600; }
     
-    /* ИСПРАВЛЕНИЕ: Улучшенная и более стабильная сетка */
     .grid-container { display: grid; grid-template-columns: 1fr; gap: 25px; }
     .kpi-card { padding: 20px; text-align: center; }
     .kpi-icon { font-size: 2.5em; margin-bottom: 10px; }
@@ -79,16 +78,16 @@
     .summary-total { font-size: 1.5em; font-weight: 700; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-border-color); display: flex; justify-content: space-between; }
     .loading-placeholder { min-height: 100px; }
 
-    /* Медиа-запросы для больших экранов */
     @media (min-width: 768px) {
       .top-nav a .nav-text { display: inline; }
       .finance-view .grid-container, .expenses-view .grid-container { grid-template-columns: 1fr 1fr; }
-      .finance-view .grid-container .card.full-width { grid-column: 1 / -1; }
+      .finance-view .grid-container .full-width { grid-column: 1 / -1; }
       .summary-view .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 25px; }
     }
   </style>
 </head>
 <body>
+  <!-- СОДЕРЖИМОЕ СТРАНИЦЫ ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ -->
   <div class="top-nav">
     <a class="nav-link active" onclick="showView('attendance-view', this)"><i class='bx bx-calendar-check'></i> <span class="nav-text">Посещаемость</span></a>
     <a class="nav-link" onclick="showView('finance-view', this)"><i class='bx bx-ruble'></i> <span class="nav-text">Финансы</span></a>
@@ -257,9 +256,8 @@
     }
 
     // !!!!! ВАЖНО: Вставьте сюда ВАШ актуальный URL API !!!!!
-    // const API_URL = 'https://script.google.com/macros/s/AKfycbzcjI_7oPFcaJdwUdY4IfPzK9xGMgyBsVHGrgwYOLODAM_GAVbXOjaPzzBwydqTd62t/exec';
-const API_URL = 'https://script.google.com/macros/s/AKfycbz-vY-r4j4J6Y_GfX-ODa9rB2dY2f-a2s-gT-I-q-g_A-Z-Y-X-c-v-b-n-m/exec'; // ВРЕМЕННЫЙ ТЕСТОВЫЙ URL
-    
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwdhu00oylQCPBBwS-MfdnCNYKlvzYGFX2rKyCIgbTaDexIfOc-MSZMbEEk3PjiRraQ/exec';
+
     let currentMonday = getMonday(new Date());
     let modalContext = {};
     let attendanceChanges = {};
@@ -268,13 +266,14 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbz-vY-r4j4J6Y_GfX-ODa9r
     let attendanceChart = null;
     let expensesPieChart = null;
 
+    // ИЗМЕНЕНИЕ: Добавлен параметр redirect: 'error' для более точной диагностики
     async function callApi(action, payload = {}) {
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action, payload }),
-          redirect: 'follow'
+          redirect: 'error' // Это изменение не даст браузеру следовать за редиректом 302
         });
         if (!response.ok) throw new Error(`Ошибка сети: ${response.statusText}`);
         const result = await response.json();
@@ -287,6 +286,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbz-vY-r4j4J6Y_GfX-ODa9r
       }
     }
 
+    // Остальной JavaScript код остается без изменений
     document.addEventListener('DOMContentLoaded', onPageLoad);
     document.getElementById('add-child-form').addEventListener('submit', handleAddChildSubmit);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);
