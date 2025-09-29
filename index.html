@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Детский сад: Панель управления</title>
-  <!-- Скрипт для интеграции с Telegram -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --bg-color: #f4f6f9; --card-bg-color: #ffffff; --text-color: #1c1c1e; --text-color-secondary: #8a8a8e; --primary-color: #5856d6; --light-border-color: #eef2f7; --shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
       --color-present: #34c759; --color-absent: #ff3b30; --color-sick: #5856d6; --color-adaptation: #ff9500; --color-inactive: #f2f2f7;
+      --color-profit: #2ecc71; --color-loss: #e74c3c;
     }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-color); }
     h1, h2, h3, h4 { margin-top: 0; font-weight: 600; }
@@ -54,18 +54,21 @@
     #adaptation-summary-container p { margin: 4px 0; font-size: 0.95em; }
     .history-filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
     .history-filters > div { flex: 1; min-width: 150px; }
-    .payment-item, .child-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--light-border-color); }
-    .payment-item:last-child, .child-item:last-child { border-bottom: none; }
-    .payment-item-details, .child-item-details { display: flex; flex-direction: column; }
-    .payment-item-fio, .child-item-fio { font-weight: 500; }
+    .payment-item, .child-item, .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--light-border-color); }
+    .payment-item:last-child, .child-item:last-child, .summary-item:last-child { border-bottom: none; }
+    .payment-item-details, .child-item-details, .summary-item-details { display: flex; flex-direction: column; }
+    .payment-item-fio, .child-item-fio, .summary-item-label { font-weight: 500; }
     .payment-item-date, .child-item-sub { font-size: 0.9em; color: var(--text-color-secondary); }
-    .payment-item-amount { font-size: 1.1em; font-weight: 600; color: var(--primary-color); }
+    .payment-item-amount, .summary-item-amount { font-size: 1.1em; font-weight: 600; }
     .child-item.inactive { background-color: var(--color-inactive); opacity: 0.6; }
     .child-item-actions { display: flex; gap: 8px; }
     .btn-small { padding: 6px 12px; font-size: 0.85em; }
     .btn-edit { background-color: #ff9500; color: white; }
     .btn-deactivate { background-color: #ff3b30; color: white; }
     .btn-activate { background-color: #34c759; color: white; }
+    .summary-total { font-size: 1.5em; font-weight: 700; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-border-color); display: flex; justify-content: space-between; }
+    .profit { color: var(--color-profit); }
+    .loss { color: var(--color-loss); }
 
     @media (max-width: 768px) {
       .main-content { padding: 15px; }
@@ -121,7 +124,7 @@
           </form>
         </div>
         <div id="summary-card" class="card">
-          <h3>Сводка</h3>
+          <h3>Сводка по детям</h3>
           <label for="summary-month-filter">Выберите месяц:</label>
           <select id="summary-month-filter"></select>
           <p>План: <span id="expected-income">...</span> ₽</p>
@@ -197,6 +200,15 @@
           <span id="avg-check-result">...</span> ₽
         </p>
       </div>
+      <!-- НОВЫЙ БЛОК -->
+      <div class="card">
+        <h3>Общая сводка за месяц</h3>
+        <label for="overall-summary-month-filter">Выберите месяц:</label>
+        <select id="overall-summary-month-filter"></select>
+        <div id="overall-summary-container" style="margin-top: 20px;">
+            <p>Загрузка...</p>
+        </div>
+      </div>
       <div class="card">
         <h3>Посещаемость по дням месяца</h3>
         <label for="chart-month-filter">Выберите месяц:</label>
@@ -241,13 +253,12 @@
   </div>
 
   <script>
-    // Инициализация Telegram Mini App
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
     }
 
-    // ===== ВАША ССЫЛКА НА API УЖЕ ВСТАВЛЕНА НИЖЕ =====
+    // !!!!! ВАЖНО: Вставьте сюда ВАШ актуальный URL API !!!!!
     const API_URL = 'https://script.google.com/macros/s/AKfycbx6TRYWouH1Ud2lv3SEGOkFJg4bkQ_nSQYg-vyV3iS4jV-ZHb2UBlHA0X39OCea-NRY/exec';
 
     let currentMonday = getMonday(new Date());
@@ -257,7 +268,6 @@
     let allKidsData = [];
     let attendanceChart = null;
 
-    // Новая централизованная функция для всех запросов к API
     async function callApi(action, payload = {}) {
       try {
         const response = await fetch(API_URL, {
@@ -288,6 +298,7 @@
     document.getElementById('history-month-filter').addEventListener('change', renderPaymentHistory);
     document.getElementById('summary-month-filter').addEventListener('change', updateFinancialSummary);
     document.getElementById('expense-month-filter').addEventListener('change', updateExpenseHistory);
+    document.getElementById('overall-summary-month-filter').addEventListener('change', displayOverallSummary);
 
     function onPageLoad() {
       fetchAndDisplayAttendance();
@@ -487,17 +498,22 @@
       totalContainer.textContent = `${total.toLocaleString('ru-RU')} ₽`;
     }
 
-    async function updateSummaryView() {
+    function updateSummaryView() {
       populateSummaryMonthFilters();
       displayAverageCheck();
       updateAttendanceChart();
+      displayOverallSummary();
     }
 
     function populateSummaryMonthFilters() {
-      const avgCheckFilter = document.getElementById('avg-check-month-filter');
-      const chartFilter = document.getElementById('chart-month-filter');
+      const filters = [
+        document.getElementById('avg-check-month-filter'),
+        document.getElementById('chart-month-filter'),
+        document.getElementById('overall-summary-month-filter')
+      ];
       const uniqueMonths = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-      [avgCheckFilter, chartFilter].forEach(filter => {
+      
+      filters.forEach(filter => {
         if (filter.options.length > 0) return;
         filter.innerHTML = '';
         uniqueMonths.forEach(month => {
@@ -507,10 +523,11 @@
           filter.appendChild(option);
         });
       });
+      
       const currentMonthName = new Date().toLocaleString('ru-RU', { month: 'long' });
       const capitalizedCurrentMonth = currentMonthName.charAt(0).toUpperCase() + currentMonthName.slice(1);
-      avgCheckFilter.value = capitalizedCurrentMonth;
-      chartFilter.value = capitalizedCurrentMonth;
+      
+      filters.forEach(filter => filter.value = capitalizedCurrentMonth);
     }
 
     async function displayAverageCheck() {
@@ -569,6 +586,54 @@
           plugins: { legend: { display: false } }
         }
       });
+    }
+
+    async function displayOverallSummary() {
+        const selectedMonth = document.getElementById('overall-summary-month-filter').value;
+        const container = document.getElementById('overall-summary-container');
+        container.innerHTML = '<p>Загрузка...</p>';
+
+        try {
+            const summary = await callApi('getOverallSummary', selectedMonth);
+            let html = `
+                <div class="summary-item">
+                    <span class="summary-item-label">Общий приход:</span>
+                    <span class="summary-item-amount" style="color: var(--color-profit);">${summary.totalIncome.toLocaleString('ru-RU')} ₽</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-item-label">Общий расход:</span>
+                    <span class="summary-item-amount" style="color: var(--color-loss);">${summary.totalExpenses.toLocaleString('ru-RU')} ₽</span>
+                </div>
+                <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 15px 0;">
+                <h4>Расходы по категориям:</h4>
+            `;
+
+            const categories = Object.keys(summary.expensesByCategory);
+            if (categories.length === 0) {
+                html += '<p>Расходов в этом месяце не было.</p>';
+            } else {
+                categories.forEach(category => {
+                    const amount = summary.expensesByCategory[category];
+                    html += `
+                        <div class="summary-item">
+                            <span class="summary-item-label" style="font-weight: 400;">${category}</span>
+                            <span class="summary-item-amount" style="font-size: 1em; color: var(--text-color-secondary);">${amount.toLocaleString('ru-RU')} ₽</span>
+                        </div>
+                    `;
+                });
+            }
+
+            const profitClass = summary.totalRemaining >= 0 ? 'profit' : 'loss';
+            html += `
+                <div class="summary-total">
+                    <span>Остаток:</span>
+                    <span class="${profitClass}">${summary.totalRemaining.toLocaleString('ru-RU')} ₽</span>
+                </div>
+            `;
+            container.innerHTML = html;
+        } catch (error) {
+            container.innerHTML = '<p>Не удалось загрузить сводку.</p>';
+        }
     }
 
     async function loadPaymentHistory() {
@@ -923,7 +988,7 @@
       document.getElementById('save-attendance-btn').style.display = 'none';
       currentMonday.setDate(currentMonday.getDate() + days);
       fetchAndDisplayAttendance();
-    } 
+    }
   </script>
 </body>
 </html>
