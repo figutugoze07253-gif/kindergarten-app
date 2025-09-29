@@ -5,95 +5,102 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Детский сад: Панель управления</title>
+  
+  <!-- Подключаем шрифты и иконки -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    /* НОВАЯ ДИЗАЙН-СИСТЕМА */
     :root {
-      --bg-color: #f4f6f9; --card-bg-color: #ffffff; --text-color: #1c1c1e; --text-color-secondary: #8a8a8e; --primary-color: #5856d6; --light-border-color: #eef2f7; --shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-      --color-present: #34c759; --color-absent: #ff3b30; --color-sick: #5856d6; --color-adaptation: #ff9500; --color-inactive: #f2f2f7;
-      --color-profit: #2ecc71; --color-loss: #e74c3c;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --bg-color: #f7f8fc;
+      --card-bg-color: #ffffff;
+      --text-color: #2c3e50;
+      --text-color-secondary: #95a5a6;
+      --primary-color: #3498db;
+      --primary-color-light: #ecf5fd;
+      --light-border-color: #ecf0f1;
+      --shadow: 0 5px 20px rgba(44, 62, 80, 0.07);
+      --shadow-hover: 0 8px 25px rgba(44, 62, 80, 0.1);
+      --color-profit: #27ae60;
+      --color-loss: #e74c3c;
+      --color-present: #27ae60;
+      --color-absent: #e74c3c;
+      --color-sick: #8e44ad;
+      --color-adaptation: #f39c12;
     }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-color); }
+    * { box-sizing: border-box; }
+    body { font-family: var(--font-family); margin: 0; background-color: var(--bg-color); color: var(--text-color); -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     h1, h2, h3, h4 { margin-top: 0; font-weight: 600; }
-    .top-nav { background-color: var(--card-bg-color); padding: 10px 20px; border-bottom: 1px solid var(--light-border-color); display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
-    .top-nav a { text-decoration: none; color: var(--text-color-secondary); font-size: 1em; font-weight: 500; padding: 10px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; }
+    .top-nav { background-color: var(--card-bg-color); padding: 10px 20px; border-bottom: 1px solid var(--light-border-color); display: flex; justify-content: center; gap: 10px; position: sticky; top: 0; z-index: 1000; box-shadow: var(--shadow); }
+    .top-nav a { text-decoration: none; color: var(--text-color-secondary); font-size: 1em; font-weight: 500; padding: 10px 16px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px; }
+    .top-nav a .nav-text { display: none; }
     .top-nav a.active { background-color: var(--primary-color); color: white; }
-    .main-content { padding: 20px; max-width: 900px; margin: 0 auto; }
+    .main-content { padding: 20px; max-width: 1200px; margin: 0 auto; }
     .view { display: none; }
     .view.active { display: block; }
-    .card { background-color: var(--card-bg-color); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+    .card { background-color: var(--card-bg-color); border-radius: 16px; padding: 25px; box-shadow: var(--shadow); margin-bottom: 25px; transition: all 0.3s ease; }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .card-header i { font-size: 1.5em; color: var(--primary-color); }
+    .card-header h3 { margin-bottom: 0; }
     h1 { font-size: 2em; margin-bottom: 20px; }
-    h3 { font-size: 1.3em; margin-bottom: 15px; }
-    #controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    #week-display { font-size: 1.1em; font-weight: 600; }
+    label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
+    input, select { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid var(--light-border-color); border-radius: 10px; box-sizing: border-box; font-size: 1em; background-color: var(--bg-color); font-family: var(--font-family); }
+    input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px var(--primary-color-light); }
+    button, .btn { border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: 500; transition: all 0.2s ease; border: none; padding: 14px 20px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    button[type="submit"] { background-color: var(--primary-color); color: white; width: 100%; }
+    button[type="submit"]:hover { opacity: 0.85; }
     .table-responsive-wrapper { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
     th, td { border: none; border-bottom: 1px solid var(--light-border-color); padding: 16px 14px; text-align: center; white-space: nowrap; }
-    th { background-color: transparent; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; text-transform: uppercase; }
-    td { font-size: 1em; }
-    tr:last-child td { border-bottom: none; }
+    th { background-color: transparent; font-weight: 600; color: var(--text-color-secondary); font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.5px; }
     td:not(:first-child) { cursor: pointer; }
-    .today { background-color: var(--light-border-color); border-radius: 12px; }
-    tfoot tr { font-weight: bold; color: var(--primary-color); }
-    tfoot td { border-top: 2px solid var(--light-border-color); }
-    label { display: block; margin-bottom: 8px; font-weight: 500; color: var(--text-color-secondary); font-size: 0.9em; }
-    input, select { width: 100%; padding: 14px; margin-bottom: 15px; border: 1px solid var(--light-border-color); border-radius: 12px; box-sizing: border-box; font-size: 1em; background-color: var(--bg-color); }
-    input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(88, 86, 214, 0.2); }
-    button, .btn { border-radius: 12px; cursor: pointer; font-size: 1em; font-weight: 500; transition: all 0.2s ease; border: none; padding: 14px; text-decoration: none; display: inline-block; text-align: center; }
-    button[type="submit"] { background-color: var(--primary-color); color: white; width: 100%; }
-    button[type="submit"]:hover { opacity: 0.85; }
-    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-    .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 400px; border-radius: 16px; }
-    .modal-header { padding-bottom: 10px; border-bottom: 1px solid #ccc; } .modal-header h2 { margin: 0; } .modal-body { padding: 15px 0; } .status-buttons button { width: 100%; box-sizing: border-box; padding: 14px; margin: 6px 0; font-size: 1em; cursor: pointer; border-radius: 12px; border: 1px solid var(--light-border-color); background-color: #fff; } .status-buttons button.selected { background-color: var(--primary-color); color: white; border-color: var(--primary-color); } #adaptation-details { display: none; margin-top: 15px; } #adaptation-details input { width: 100px; } .modal-footer { text-align: right; margin-top: 15px; } .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
     .status-icon { font-size: 1.4em; font-weight: bold; }
-    .status-present { color: #34c759; } .status-absent { color: #ff3b30; } .status-sick { color: #5856d6; } .status-adaptation { color: #ff9500; }
-    #expected-income { color: #34c759; font-weight: bold; } #actual-income { color: var(--primary-color); font-weight: bold; }
-    #debtors-list p { color: #ff3b30; border-left: 3px solid #ff3b30; padding-left: 10px; margin: 5px 0; }
-    #overpayments-list p { color: #34c759; border-left: 3px solid #34c759; padding-left: 10px; margin: 5px 0; }
-    #save-attendance-btn { display: none; width: 100%; padding: 15px; margin-top: 20px; background-color: var(--color-present); color: white; border: none; }
-    #adaptation-summary-container p { margin: 4px 0; font-size: 0.95em; }
-    .history-filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-    .history-filters > div { flex: 1; min-width: 150px; }
+    .status-present { color: var(--color-present); } .status-absent { color: var(--color-absent); } .status-sick { color: var(--color-sick); } .status-adaptation { color: var(--color-adaptation); }
     .payment-item, .child-item, .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--light-border-color); }
     .payment-item:last-child, .child-item:last-child, .summary-item:last-child { border-bottom: none; }
-    .payment-item-details, .child-item-details, .summary-item-details { display: flex; flex-direction: column; }
     .payment-item-fio, .child-item-fio, .summary-item-label { font-weight: 500; }
-    .payment-item-date, .child-item-sub { font-size: 0.9em; color: var(--text-color-secondary); }
     .payment-item-amount, .summary-item-amount { font-size: 1.1em; font-weight: 600; }
-    .child-item.inactive { background-color: var(--color-inactive); opacity: 0.6; }
-    .child-item-actions { display: flex; gap: 8px; }
-    .btn-small { padding: 6px 12px; font-size: 0.85em; }
-    .btn-edit { background-color: #ff9500; color: white; }
-    .btn-deactivate { background-color: #ff3b30; color: white; }
-    .btn-activate { background-color: #34c759; color: white; }
-    .summary-total { font-size: 1.5em; font-weight: 700; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-border-color); display: flex; justify-content: space-between; }
+    
+    /* СТИЛИ ДЛЯ СВОДКИ */
+    .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+    .kpi-card { padding: 20px; text-align: center; }
+    .kpi-icon { font-size: 2.5em; margin-bottom: 10px; }
+    .kpi-label { font-size: 1em; font-weight: 500; color: var(--text-color-secondary); margin-bottom: 5px; }
+    .kpi-value { font-size: 2em; font-weight: 700; }
     .profit { color: var(--color-profit); }
     .loss { color: var(--color-loss); }
+    .summary-total { font-size: 1.5em; font-weight: 700; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-border-color); display: flex; justify-content: space-between; }
 
-    @media (max-width: 768px) {
-      .main-content { padding: 15px; }
-      .card { padding: 15px; }
-      .top-nav { padding: 10px 5px; }
-      .top-nav a { padding: 8px 12px; }
-      h1 { font-size: 1.8em; }
-      h3 { font-size: 1.2em; }
-      input, select, button { font-size: 16px; }
-      .finance-section { display: flex; flex-direction: column; gap: 20px; }
+    @media (min-width: 768px) {
+      .top-nav a .nav-text { display: inline; }
+      .summary-view .grid-container { grid-template-columns: repeat(3, 1fr); }
+      .summary-view .grid-container .card:nth-child(2) { grid-column: span 2; }
+      .summary-view .grid-container .card:nth-child(3) { grid-column: span 3; }
     }
   </style>
 </head>
 <body>
   <div class="top-nav">
-    <a class="nav-link active" onclick="showView('attendance-view', this)">Посещаемость</a>
-    <a class="nav-link" onclick="showView('finance-view', this)">Финансы</a>
-    <a class="nav-link" onclick="showView('expenses-view', this)">Расходы</a>
-    <a class="nav-link" onclick="showView('summary-view', this)">Сводка</a>
+    <a class="nav-link active" onclick="showView('attendance-view', this)"><i class='bx bx-calendar-check'></i> <span class="nav-text">Посещаемость</span></a>
+    <a class="nav-link" onclick="showView('finance-view', this)"><i class='bx bx-ruble'></i> <span class="nav-text">Финансы</span></a>
+    <a class="nav-link" onclick="showView('expenses-view', this)"><i class='bx bx-cart'></i> <span class="nav-text">Расходы</span></a>
+    <a class="nav-link" onclick="showView('summary-view', this)"><i class='bx bx-line-chart'></i> <span class="nav-text">Сводка</span></a>
   </div>
 
   <div class="main-content">
     <div id="attendance-view" class="view active">
-      <h1>Посещаемость</h1>
       <div class="card">
+        <div class="card-header">
+          <i class='bx bx-calendar-check'></i>
+          <h3>Посещаемость</h3>
+        </div>
         <div id="controls">
           <div id="week-display">Загрузка...</div>
           <div style="display: flex; gap: 10px;">
@@ -108,23 +115,35 @@
           <div id="daily-adaptation-summary"></div>
           <div id="weekly-adaptation-summary" style="margin-top: 15px; font-weight: 500;"></div>
         </div>
-        <button id="save-attendance-btn" onclick="saveAllChanges()">Сохранить изменения</button>
+        <button id="save-attendance-btn" onclick="saveAllChanges()"><i class='bx bx-save'></i>Сохранить изменения</button>
       </div>
     </div>
     <div id="finance-view" class="view">
-      <h1>Финансы</h1>
-      <div class="finance-section">
-        <div id="payment-card" class="card">
-          <h3>Добавить платёж</h3>
+      <div class="grid-container">
+        <div class="card">
+          <div class="card-header"><i class='bx bx-wallet'></i><h3>Добавить платёж</h3></div>
           <form id="add-payment-form" class="finance-form">
             <label for="kid-select">Ребёнок:</label><select id="kid-select" required></select>
             <label for="month-select">Месяц:</label><select id="month-select" required></select>
             <label for="amount">Сумма:</label><input type="number" id="amount" required>
-            <button type="submit">Добавить платёж</button>
+            <button type="submit"><i class='bx bx-plus'></i>Добавить платёж</button>
           </form>
         </div>
-        <div id="summary-card" class="card">
-          <h3>Сводка по детям</h3>
+        <div class="card">
+          <div class="card-header"><i class='bx bx-user-plus'></i><h3>Добавить ребёнка</h3></div>
+          <form id="add-child-form" class="finance-form">
+            <label for="fio">ФИО:</label><input type="text" id="fio" required>
+            <label for="group-select">Группа:</label><select id="group-select" required></select>
+            <label for="tariff">Тариф:</label><input type="number" id="tariff" required>
+            <button type="submit"><i class='bx bx-user-plus'></i>Добавить ребёнка</button>
+          </form>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="card-header"><i class='bx bx-group'></i><h3>Управление детьми</h3></div>
+          <div id="child-list"><p>Загрузка...</p></div>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="card-header"><i class='bx bx-bar-chart-alt-2'></i><h3>Сводка по детям</h3></div>
           <label for="summary-month-filter">Выберите месяц:</label>
           <select id="summary-month-filter"></select>
           <p>План: <span id="expected-income">...</span> ₽</p>
@@ -135,89 +154,72 @@
           <h4 style="margin-top: 20px;">Переплаты:</h4>
           <div id="overpayments-list"><p>Загрузка...</p></div>
         </div>
-        <div id="child-card" class="card">
-          <h3>Добавить ребёнка</h3>
-          <form id="add-child-form" class="finance-form">
-            <label for="fio">ФИО:</label><input type="text" id="fio" required>
-            <label for="group-select">Группа:</label><select id="group-select" required></select>
-            <label for="tariff">Тариф:</label><input type="number" id="tariff" required>
-            <button type="submit">Добавить ребёнка</button>
-          </form>
-        </div>
-        <div id="child-management-card" class="card">
-          <h3>Управление детьми</h3>
-          <div id="child-list"><p>Загрузка...</p></div>
-        </div>
-        <div id="history-card" class="card">
-          <h3>История платежей</h3>
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="card-header"><i class='bx bx-history'></i><h3>История платежей</h3></div>
           <div class="history-filters">
-            <div>
-              <label for="history-kid-filter">Ребёнок:</label>
-              <select id="history-kid-filter"></select>
-            </div>
-            <div>
-              <label for="history-month-filter">Месяц:</label>
-              <select id="history-month-filter"></select>
-            </div>
+            <div><label for="history-kid-filter">Ребёнок:</label><select id="history-kid-filter"></select></div>
+            <div><label for="history-month-filter">Месяц:</label><select id="history-month-filter"></select></div>
           </div>
-          <button onclick="resetFilters()">Сбросить фильтры</button>
+          <button onclick="resetFilters()"><i class='bx bx-reset'></i>Сбросить фильтры</button>
           <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 20px 0;">
           <div id="payment-history-list"><p>Загрузка...</p></div>
         </div>
       </div>
     </div>
     <div id="expenses-view" class="view">
-      <h1>Расходы</h1>
-      <div class="card">
-        <h3>Добавить расход</h3>
-        <form id="add-expense-form">
-          <label for="expense-month-select">Месяц расхода:</label>
-          <select id="expense-month-select" required></select>
-          <label for="expense-category-select">Категория:</label>
-          <select id="expense-category-select" required></select>
-          <label for="expense-amount">Сумма:</label>
-          <input type="number" id="expense-amount" required>
-          <label for="expense-description">Описание (необязательно):</label>
-          <input type="text" id="expense-description">
-          <button type="submit">Добавить расход</button>
-        </form>
-      </div>
-      <div class="card">
-        <h3>История расходов</h3>
-        <label for="expense-month-filter">Выберите месяц:</label>
-        <select id="expense-month-filter"></select>
-        <div id="expense-list" style="margin-top: 15px;"></div>
-        <h4 style="margin-top: 20px; text-align: right;">Итого: <span id="expense-total" style="color: var(--primary-color);">0 ₽</span></h4>
+      <div class="grid-container">
+        <div class="card">
+          <div class="card-header"><i class='bx bx-cart-add'></i><h3>Добавить расход</h3></div>
+          <form id="add-expense-form">
+            <label for="expense-month-select">Месяц расхода:</label><select id="expense-month-select" required></select>
+            <label for="expense-category-select">Категория:</label><select id="expense-category-select" required></select>
+            <label for="expense-amount">Сумма:</label><input type="number" id="expense-amount" required>
+            <label for="expense-description">Описание (необязательно):</label><input type="text" id="expense-description">
+            <button type="submit"><i class='bx bx-plus'></i>Добавить расход</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-header"><i class='bx bx-history'></i><h3>История расходов</h3></div>
+          <label for="expense-month-filter">Выберите месяц:</label><select id="expense-month-filter"></select>
+          <div id="expense-list" style="margin-top: 15px;"></div>
+          <h4 style="margin-top: 20px; text-align: right;">Итого: <span id="expense-total" style="color: var(--primary-color);">0 ₽</span></h4>
+        </div>
       </div>
     </div>
     <div id="summary-view" class="view">
-      <h1>Сводка</h1>
       <div class="card">
-        <h3>Средний чек</h3>
-        <label for="avg-check-month-filter">Выберите месяц:</label>
-        <select id="avg-check-month-filter"></select>
-        <p style="font-size: 2.5em; font-weight: 700; color: var(--primary-color); margin-top: 10px;">
-          <span id="avg-check-result">...</span> ₽
-        </p>
-      </div>
-      <!-- НОВЫЙ БЛОК -->
-      <div class="card">
-        <h3>Общая сводка за месяц</h3>
-        <label for="overall-summary-month-filter">Выберите месяц:</label>
+        <label for="overall-summary-month-filter">Выберите месяц для сводки:</label>
         <select id="overall-summary-month-filter"></select>
-        <div id="overall-summary-container" style="margin-top: 20px;">
-            <p>Загрузка...</p>
-        </div>
       </div>
-      <div class="card">
-        <h3>Посещаемость по дням месяца</h3>
-        <label for="chart-month-filter">Выберите месяц:</label>
-        <select id="chart-month-filter"></select>
-        <canvas id="attendanceChart" style="margin-top: 15px;"></canvas>
+      <div class="grid-container">
+        <div class="card kpi-card">
+          <i class='bx bx-trending-up kpi-icon profit'></i>
+          <div class="kpi-label">Общий приход</div>
+          <div class="kpi-value profit" id="summary-income">...</div>
+        </div>
+        <div class="card kpi-card">
+          <i class='bx bx-trending-down kpi-icon loss'></i>
+          <div class="kpi-label">Общий расход</div>
+          <div class="kpi-value loss" id="summary-expenses">...</div>
+        </div>
+        <div class="card kpi-card">
+          <i class='bx bx-wallet-alt kpi-icon'></i>
+          <div class="kpi-label">Остаток (Прибыль)</div>
+          <div class="kpi-value" id="summary-remaining">...</div>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="card-header"><i class='bx bx-pie-chart-alt-2'></i><h3>Расходы по категориям</h3></div>
+          <div style="max-width: 400px; margin: 0 auto;"><canvas id="expensesPieChart"></canvas></div>
+        </div>
+        <div class="card" style="grid-column: 1 / -1;">
+          <div class="card-header"><i class='bx bx-bar-chart-square'></i><h3>Посещаемость по дням месяца</h3></div>
+          <canvas id="attendanceChart"></canvas>
+        </div>
       </div>
     </div>
   </div>
   
+  <!-- MODALS -->
   <div id="status-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header"><span class="close-btn" onclick="closeModal('status-modal')">&times;</span><h2>Отметить посещаемость</h2></div>
@@ -236,7 +238,6 @@
       <div class="modal-footer"><button onclick="saveStatus()">Сохранить</button></div>
     </div>
   </div>
-
   <div id="edit-child-modal" class="modal">
     <div class="modal-content">
       <div class="modal-header"><span class="close-btn" onclick="closeModal('edit-child-modal')">&times;</span><h2>Редактировать данные</h2></div>
@@ -267,6 +268,7 @@
     let allHistoryPayments = [];
     let allKidsData = [];
     let attendanceChart = null;
+    let expensesPieChart = null;
 
     async function callApi(action, payload = {}) {
       try {
@@ -292,13 +294,11 @@
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);
     document.getElementById('add-expense-form').addEventListener('submit', handleAddExpenseSubmit);
     document.getElementById('edit-child-form').addEventListener('submit', handleUpdateChildSubmit);
-    document.getElementById('avg-check-month-filter').addEventListener('change', displayAverageCheck);
-    document.getElementById('chart-month-filter').addEventListener('change', updateAttendanceChart);
     document.getElementById('history-kid-filter').addEventListener('change', renderPaymentHistory);
     document.getElementById('history-month-filter').addEventListener('change', renderPaymentHistory);
     document.getElementById('summary-month-filter').addEventListener('change', updateFinancialSummary);
     document.getElementById('expense-month-filter').addEventListener('change', updateExpenseHistory);
-    document.getElementById('overall-summary-month-filter').addEventListener('change', displayOverallSummary);
+    document.getElementById('overall-summary-month-filter').addEventListener('change', updateSummaryView);
 
     function onPageLoad() {
       fetchAndDisplayAttendance();
@@ -386,7 +386,6 @@
             closeModal('edit-child-modal');
             loadInitialFinanceData();
         } catch (error) {
-            // Error is already handled by callApi
         } finally {
             button.textContent = 'Сохранить изменения';
             button.disabled = false;
@@ -401,7 +400,6 @@
             alert(response.message);
             loadInitialFinanceData();
         } catch (error) {
-            // Error is handled by callApi
         }
     }
 
@@ -416,7 +414,7 @@
           option.textContent = cat;
           categorySelect.appendChild(option);
         });
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
       
       const monthFilter = document.getElementById('expense-month-filter');
       const monthSelect = document.getElementById('expense-month-select');
@@ -456,9 +454,9 @@
         const currentMonthName = new Date().toLocaleString('ru-RU', { month: 'long' });
         document.getElementById('expense-month-select').value = currentMonthName.charAt(0).toUpperCase() + currentMonthName.slice(1);
         updateExpenseHistory();
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
       finally {
-        button.textContent = 'Добавить расход';
+        button.innerHTML = "<i class='bx bx-plus'></i>Добавить расход";
         button.disabled = false;
       }
     }
@@ -492,7 +490,7 @@
             <span class="payment-item-fio">${exp.category}</span>
             <span class="payment-item-date">${exp.date} - ${exp.description || ''}</span>
           </div>
-          <span class="payment-item-amount" style="color: var(--color-absent);">${exp.amount.toLocaleString('ru-RU')} ₽</span>`;
+          <span class="payment-item-amount" style="color: var(--color-loss);">${exp.amount.toLocaleString('ru-RU')} ₽</span>`;
         listContainer.appendChild(item);
       });
       totalContainer.textContent = `${total.toLocaleString('ru-RU')} ₽`;
@@ -500,15 +498,12 @@
 
     function updateSummaryView() {
       populateSummaryMonthFilters();
-      displayAverageCheck();
-      updateAttendanceChart();
       displayOverallSummary();
+      updateAttendanceChart();
     }
 
     function populateSummaryMonthFilters() {
       const filters = [
-        document.getElementById('avg-check-month-filter'),
-        document.getElementById('chart-month-filter'),
         document.getElementById('overall-summary-month-filter')
       ];
       const uniqueMonths = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
@@ -530,37 +525,91 @@
       filters.forEach(filter => filter.value = capitalizedCurrentMonth);
     }
 
-    async function displayAverageCheck() {
-      const selectedMonth = document.getElementById('avg-check-month-filter').value;
-      const resultSpan = document.getElementById('avg-check-result');
-      resultSpan.textContent = '...';
-      try {
-        const allPayments = await callApi('getPaymentHistory');
-        const paymentsInMonth = allPayments.filter(p => p.month === selectedMonth);
-        if (paymentsInMonth.length === 0) {
-          resultSpan.textContent = '0';
-          return;
+    async function displayOverallSummary() {
+        const selectedMonth = document.getElementById('overall-summary-month-filter').value;
+        document.getElementById('summary-income').textContent = '...';
+        document.getElementById('summary-expenses').textContent = '...';
+        document.getElementById('summary-remaining').textContent = '...';
+
+        try {
+            const summary = await callApi('getOverallSummary', selectedMonth);
+            const formatCurrency = (num) => num.toLocaleString('ru-RU') + ' ₽';
+
+            document.getElementById('summary-income').textContent = formatCurrency(summary.totalIncome);
+            document.getElementById('summary-expenses').textContent = formatCurrency(summary.totalExpenses);
+            const remainingEl = document.getElementById('summary-remaining');
+            remainingEl.textContent = formatCurrency(summary.totalRemaining);
+            remainingEl.className = 'kpi-value'; // reset class
+            remainingEl.classList.add(summary.totalRemaining >= 0 ? 'profit' : 'loss');
+
+            displayExpensesPieChart(summary.expensesByCategory);
+
+        } catch (error) {
+            document.getElementById('summary-income').textContent = 'Ошибка';
+            document.getElementById('summary-expenses').textContent = 'Ошибка';
+            document.getElementById('summary-remaining').textContent = 'Ошибка';
         }
-        const totalAmount = paymentsInMonth.reduce((sum, p) => sum + p.amount, 0);
-        const uniqueKids = [...new Set(paymentsInMonth.map(p => p.kidId))];
-        const numberOfKidsWhoPaid = uniqueKids.length;
-        if (numberOfKidsWhoPaid === 0) {
-          resultSpan.textContent = '0';
-          return;
+    }
+
+    function displayExpensesPieChart(expensesData) {
+        if (expensesPieChart) {
+            expensesPieChart.destroy();
         }
-        const average = totalAmount / numberOfKidsWhoPaid;
-        resultSpan.textContent = average.toLocaleString('ru-RU', { maximumFractionDigits: 0 });
-      } catch (error) {
-        resultSpan.textContent = 'Ошибка';
-      }
+        const ctx = document.getElementById('expensesPieChart').getContext('2d');
+        const labels = Object.keys(expensesData);
+        const data = Object.values(expensesData);
+
+        if (labels.length === 0) {
+            // Можно показать сообщение, если нет данных
+            return;
+        }
+
+        expensesPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Расходы',
+                    data: data,
+                    backgroundColor: [
+                        '#3498db', '#e74c3c', '#9b59b6', '#f1c40f', '#2ecc71',
+                        '#1abc9c', '#e67e22', '#34495e', '#7f8c8d', '#c0392b'
+                    ],
+                    borderColor: 'var(--card-bg-color)',
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(context.parsed);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     async function updateAttendanceChart() {
-      const selectedMonth = document.getElementById('chart-month-filter').value;
+      const selectedMonth = document.getElementById('overall-summary-month-filter').value;
       try {
         const attendanceData = await callApi('getAttendanceForMonth', selectedMonth);
         drawAttendanceChart(attendanceData, selectedMonth);
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
     }
 
     function drawAttendanceChart(data, monthName) {
@@ -577,7 +626,7 @@
           labels: labels,
           datasets: [{
             label: 'Количество детей', data: dailyCounts,
-            backgroundColor: 'rgba(88, 86, 214, 0.7)', borderColor: 'rgba(88, 86, 214, 1)',
+            backgroundColor: 'rgba(52, 152, 219, 0.8)', borderColor: '#3498db',
             borderWidth: 1, borderRadius: 5
           }]
         },
@@ -586,54 +635,6 @@
           plugins: { legend: { display: false } }
         }
       });
-    }
-
-    async function displayOverallSummary() {
-        const selectedMonth = document.getElementById('overall-summary-month-filter').value;
-        const container = document.getElementById('overall-summary-container');
-        container.innerHTML = '<p>Загрузка...</p>';
-
-        try {
-            const summary = await callApi('getOverallSummary', selectedMonth);
-            let html = `
-                <div class="summary-item">
-                    <span class="summary-item-label">Общий приход:</span>
-                    <span class="summary-item-amount" style="color: var(--color-profit);">${summary.totalIncome.toLocaleString('ru-RU')} ₽</span>
-                </div>
-                <div class="summary-item">
-                    <span class="summary-item-label">Общий расход:</span>
-                    <span class="summary-item-amount" style="color: var(--color-loss);">${summary.totalExpenses.toLocaleString('ru-RU')} ₽</span>
-                </div>
-                <hr style="border: none; border-top: 1px solid var(--light-border-color); margin: 15px 0;">
-                <h4>Расходы по категориям:</h4>
-            `;
-
-            const categories = Object.keys(summary.expensesByCategory);
-            if (categories.length === 0) {
-                html += '<p>Расходов в этом месяце не было.</p>';
-            } else {
-                categories.forEach(category => {
-                    const amount = summary.expensesByCategory[category];
-                    html += `
-                        <div class="summary-item">
-                            <span class="summary-item-label" style="font-weight: 400;">${category}</span>
-                            <span class="summary-item-amount" style="font-size: 1em; color: var(--text-color-secondary);">${amount.toLocaleString('ru-RU')} ₽</span>
-                        </div>
-                    `;
-                });
-            }
-
-            const profitClass = summary.totalRemaining >= 0 ? 'profit' : 'loss';
-            html += `
-                <div class="summary-total">
-                    <span>Остаток:</span>
-                    <span class="${profitClass}">${summary.totalRemaining.toLocaleString('ru-RU')} ₽</span>
-                </div>
-            `;
-            container.innerHTML = html;
-        } catch (error) {
-            container.innerHTML = '<p>Не удалось загрузить сводку.</p>';
-        }
     }
 
     async function loadPaymentHistory() {
@@ -818,9 +819,9 @@
         attendanceChanges = {};
         btn.style.display = 'none';
         fetchAndDisplayAttendance();
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
       finally {
-        btn.textContent = 'Сохранить изменения';
+        btn.innerHTML = "<i class='bx bx-save'></i>Сохранить изменения";
         btn.disabled = false;
       }
     }
@@ -857,7 +858,7 @@
               select.appendChild(option);
             });
         });
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
       
       const monthSelects = [document.getElementById('month-select'), document.getElementById('history-month-filter'), document.getElementById('summary-month-filter')];
       const months = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
@@ -896,9 +897,9 @@
         form.reset();
         updateFinancialSummary();
         loadPaymentHistory();
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
       finally {
-        button.textContent = 'Добавить платёж';
+        button.innerHTML = "<i class='bx bx-plus'></i>Добавить платёж";
         button.disabled = false;
       }
     }
@@ -919,9 +920,9 @@
         alert(response.message);
         form.reset();
         loadInitialFinanceData();
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
       finally {
-        button.textContent = 'Добавить ребёнка';
+        button.innerHTML = "<i class='bx bx-user-plus'></i>Добавить ребёнка";
         button.disabled = false;
       }
     }
@@ -935,7 +936,7 @@
       try {
         const summary = await callApi('getFinancialSummary', selectedMonth);
         displayFinancialSummary(summary);
-      } catch (error) { /* Handled by callApi */ }
+      } catch (error) { }
     }
 
     function displayFinancialSummary(summary) {
