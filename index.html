@@ -56,6 +56,9 @@
     button, .btn { border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: 500; transition: all 0.2s ease; border: none; padding: 14px 20px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
     button[type="submit"] { background-color: var(--primary-color); color: white; width: 100%; }
     button[type="submit"]:hover { opacity: 0.85; }
+    .modal { display: none !important; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
+    .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 400px; border-radius: 16px; }
+    .modal-header { padding-bottom: 10px; border-bottom: 1px solid #ccc; } .modal-header h2 { margin: 0; } .modal-body { padding: 15px 0; } .status-buttons button { width: 100%; box-sizing: border-box; padding: 14px; margin: 6px 0; font-size: 1em; cursor: pointer; border-radius: 12px; border: 1px solid var(--light-border-color); background-color: #fff; } .status-buttons button.selected { background-color: var(--primary-color); color: white; border-color: var(--primary-color); } #adaptation-details { display: none; margin-top: 15px; } #adaptation-details input { width: 100px; } .modal-footer { text-align: right; margin-top: 15px; } .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
     .table-responsive-wrapper { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
     th, td { border: none; border-bottom: 1px solid var(--light-border-color); padding: 16px 14px; text-align: center; white-space: nowrap; }
@@ -67,7 +70,6 @@
     .payment-item:last-child, .child-item:last-child, .summary-item:last-child { border-bottom: none; }
     .payment-item-fio, .child-item-fio, .summary-item-label { font-weight: 500; }
     .payment-item-amount, .summary-item-amount { font-size: 1.1em; font-weight: 600; }
-    
     .grid-container { display: grid; grid-template-columns: 1fr; gap: 25px; }
     .kpi-card { padding: 20px; text-align: center; }
     .kpi-icon { font-size: 2.5em; margin-bottom: 10px; }
@@ -77,7 +79,7 @@
     .loss { color: var(--color-loss); }
     .summary-total { font-size: 1.5em; font-weight: 700; margin-top: 20px; padding-top: 20px; border-top: 2px solid var(--light-border-color); display: flex; justify-content: space-between; }
     .loading-placeholder { min-height: 100px; }
-
+    th.today { background-color: var(--primary-color-light); border-radius: 10px; }
     @media (min-width: 768px) {
       .top-nav a .nav-text { display: inline; }
       .finance-view .grid-container, .expenses-view .grid-container { grid-template-columns: 1fr 1fr; }
@@ -87,7 +89,6 @@
   </style>
 </head>
 <body>
-  <!-- СОДЕРЖИМОЕ СТРАНИЦЫ ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ -->
   <div class="top-nav">
     <a class="nav-link active" onclick="showView('attendance-view', this)"><i class='bx bx-calendar-check'></i> <span class="nav-text">Посещаемость</span></a>
     <a class="nav-link" onclick="showView('finance-view', this)"><i class='bx bx-ruble'></i> <span class="nav-text">Финансы</span></a>
@@ -256,7 +257,7 @@
     }
 
     // !!!!! ВАЖНО: Вставьте сюда ВАШ актуальный URL API !!!!!
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyoKUXk29YR06vHQRGTCAG1Mwf4tsIUb-8xohS7GyX2FOM7tutHAcOQWKlMdZNKDEQ/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyliPeSWnIgaXfh_PJVZtW8Ghlhm2q0j-Y31aOm6Gkh6G-zOhdnETWLy-6hSmEmk4VB/exec';
 
     let currentMonday = getMonday(new Date());
     let modalContext = {};
@@ -266,14 +267,13 @@
     let attendanceChart = null;
     let expensesPieChart = null;
 
-    // ИЗМЕНЕНИЕ: Добавлен параметр redirect: 'error' для более точной диагностики
     async function callApi(action, payload = {}) {
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action, payload }),
-          redirect: 'error' // Это изменение не даст браузеру следовать за редиректом 302
+          redirect: 'error'
         });
         if (!response.ok) throw new Error(`Ошибка сети: ${response.statusText}`);
         const result = await response.json();
@@ -680,13 +680,17 @@
       const thead = table.createTHead();
       const headerRow = thead.insertRow();
       headerRow.insertCell().textContent = 'ФИО';
-      const todayString = new Date().toISOString().split('T')[0];
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      const todayString = today.toISOString().split('T')[0];
       const weekdays = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
       dates.forEach(date => {
         const th = document.createElement('th');
         const dayOfWeek = weekdays[new Date(date).getUTCDay()];
         th.innerHTML = `${dayOfWeek}<br><span style="font-size:0.9em; color: #b2bec3;">${formatDate(date)}</span>`;
-        if (date === todayString) th.classList.add('today');
+        if (date === todayString) {
+          th.classList.add('today');
+        }
         headerRow.appendChild(th);
       });
       const tbody = table.createTBody();
