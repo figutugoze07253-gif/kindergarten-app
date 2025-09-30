@@ -96,8 +96,6 @@
 
   <div class="main-content">
     <div id="attendance-view" class="view active">
-      <!-- ИЗМЕНЕНИЕ ДЛЯ ТЕСТА -->
-      <h1>ПРОВЕРКА ОБНОВЛЕНИЯ v2</h1>
       <div class="card">
         <div class="card-header"><i class='bx bx-calendar-check'></i><h3>Посещаемость</h3></div>
         <div id="controls">
@@ -257,7 +255,7 @@
     }
 
     // !!!!! ВАЖНО: Вставьте сюда ВАШ актуальный URL API !!!!!
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwlnvX4497NK9XDtZvcS9EIqF_rdW-ykoPwYe9lVcALs5iKNhKnFdNn50Ai9BAFR6Ru/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbybQjRY1Wn4nYY-JF5MX0DvOAFMTeOA_A7tbt7Iy-bDRif85fB8wKPD8z3Ntm9uYwT9/exec';
 
     let currentMonday = getMonday(new Date());
     let modalContext = {};
@@ -286,7 +284,6 @@
       }
     }
 
-    // Остальной JavaScript код остается без изменений
     document.addEventListener('DOMContentLoaded', onPageLoad);
     document.getElementById('add-child-form').addEventListener('submit', handleAddChildSubmit);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);
