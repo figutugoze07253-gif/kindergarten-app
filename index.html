@@ -56,12 +56,6 @@
     button, .btn { border-radius: 10px; cursor: pointer; font-size: 1em; font-weight: 500; transition: all 0.2s ease; border: none; padding: 14px 20px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
     button[type="submit"] { background-color: var(--primary-color); color: white; width: 100%; }
     button[type="submit"]:hover { opacity: 0.85; }
-    
-    /* ИСПРАВЛЕНИЕ: Добавлено !important для гарантированного скрытия модальных окон */
-    .modal { display: none !important; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); }
-    .modal-content { background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 90%; max-width: 400px; border-radius: 16px; }
-    .modal-header { padding-bottom: 10px; border-bottom: 1px solid #ccc; } .modal-header h2 { margin: 0; } .modal-body { padding: 15px 0; } .status-buttons button { width: 100%; box-sizing: border-box; padding: 14px; margin: 6px 0; font-size: 1em; cursor: pointer; border-radius: 12px; border: 1px solid var(--light-border-color); background-color: #fff; } .status-buttons button.selected { background-color: var(--primary-color); color: white; border-color: var(--primary-color); } #adaptation-details { display: none; margin-top: 15px; } #adaptation-details input { width: 100px; } .modal-footer { text-align: right; margin-top: 15px; } .close-btn { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-    
     .table-responsive-wrapper { width: 100%; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
     th, td { border: none; border-bottom: 1px solid var(--light-border-color); padding: 16px 14px; text-align: center; white-space: nowrap; }
@@ -93,6 +87,7 @@
   </style>
 </head>
 <body>
+  <!-- СОДЕРЖИМОЕ СТРАНИЦЫ ОСТАЕТСЯ БЕЗ ИЗМЕНЕНИЙ -->
   <div class="top-nav">
     <a class="nav-link active" onclick="showView('attendance-view', this)"><i class='bx bx-calendar-check'></i> <span class="nav-text">Посещаемость</span></a>
     <a class="nav-link" onclick="showView('finance-view', this)"><i class='bx bx-ruble'></i> <span class="nav-text">Финансы</span></a>
@@ -261,9 +256,8 @@
     }
 
     // !!!!! ВАЖНО: Вставьте сюда ВАШ актуальный URL API !!!!!
-    // const API_URL = 'https://script.google.com/macros/s/AKfycbyEUunNSzdAltWfGGwr7Pt7QmYz5lPrcYLKEjrM3u6KegbznO4hV6LFs7tj9_ICmCAR/exec';
-const API_URL = 'https://script.google.com/macros/s/AKfycbz-vY-r4j4J6Y_GfX-ODa9rB2dY2f-a2s-gT-I-q-g_A-Z-Y-X-c-v-b-n-m/exec'; // ВРЕМЕННЫЙ ТЕСТОВЫЙ URL
-    
+    const API_URL = 'https://script.google.com/macros/s/AKfycbyoKUXk29YR06vHQRGTCAG1Mwf4tsIUb-8xohS7GyX2FOM7tutHAcOQWKlMdZNKDEQ/exec';
+
     let currentMonday = getMonday(new Date());
     let modalContext = {};
     let attendanceChanges = {};
@@ -272,13 +266,14 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbz-vY-r4j4J6Y_GfX-ODa9r
     let attendanceChart = null;
     let expensesPieChart = null;
 
+    // ИЗМЕНЕНИЕ: Добавлен параметр redirect: 'error' для более точной диагностики
     async function callApi(action, payload = {}) {
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action, payload }),
-          redirect: 'error'
+          redirect: 'error' // Это изменение не даст браузеру следовать за редиректом 302
         });
         if (!response.ok) throw new Error(`Ошибка сети: ${response.statusText}`);
         const result = await response.json();
@@ -291,6 +286,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbz-vY-r4j4J6Y_GfX-ODa9r
       }
     }
 
+    // Остальной JavaScript код остается без изменений
     document.addEventListener('DOMContentLoaded', onPageLoad);
     document.getElementById('add-child-form').addEventListener('submit', handleAddChildSubmit);
     document.getElementById('add-payment-form').addEventListener('submit', handleAddPaymentSubmit);
